@@ -9,9 +9,9 @@ namespace ProcessamentoImagens
 {
     class Filtros
     {
-        
 
-        
+
+
         //converter pra cinza = luminancia
         public static void luminanciaDMA(Bitmap imageBitmapSrc, Bitmap imageBitmapDest)
         {
@@ -99,6 +99,43 @@ namespace ProcessamentoImagens
             //unlock imagem origem 
             imageBitmapSrc.UnlockBits(bitmapDataSrc);
             //unlock imagem destino
+            imageBitmapDest.UnlockBits(bitmapDataDst);
+        }
+
+        public static void RGBparaCMY(Bitmap imageBitmapSrc, Bitmap imageBitmapDest)
+        {
+            int width = imageBitmapSrc.Width;
+            int height = imageBitmapSrc.Height;
+            int pixelSize = 3;
+
+            BitmapData bitmapDataSrc = imageBitmapSrc.LockBits(new Rectangle(0, 0, width, height),
+                ImageLockMode.ReadOnly, PixelFormat.Format24bppRgb);
+
+            BitmapData bitmapDataDst = imageBitmapDest.LockBits(new Rectangle(0, 0, width, height),
+                ImageLockMode.ReadWrite, PixelFormat.Format24bppRgb);
+            int padding = bitmapDataSrc.Stride - (width * pixelSize);
+            unsafe
+            {
+                byte* src1 = (byte*)bitmapDataSrc.Scan0.ToPointer();
+                byte* dst = (byte*)bitmapDataDst.Scan0.ToPointer();
+                int r, g, b;
+                for (int y = 0; y < height; y++)
+                {
+                    for (int x = 0; x < width; x++)
+                    {
+                        b = *(src1++);
+                        g = *(src1++);
+                        r = *(src1++);
+
+                        *(dst++) = (byte)(255 - b);
+                        *(dst++) = (byte)(255 - g);
+                        *(dst++) = (byte)(255 - r);
+                    }
+                    src1 += padding;
+                    dst += padding;
+                }
+            }
+            imageBitmapSrc.UnlockBits(bitmapDataSrc);
             imageBitmapDest.UnlockBits(bitmapDataDst);
         }
     }

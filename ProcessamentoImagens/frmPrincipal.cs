@@ -52,5 +52,18 @@ namespace ProcessamentoImagens
             Filtros.negativoDMA(imageBitmap, imgDest);
             pictBoxImg2.Image = imgDest;
         }
+
+        private void pictBoxImg2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void CMY_Click(object sender, EventArgs e)
+        {
+            Bitmap imgDest = new Bitmap(image);
+            imageBitmap = (Bitmap)image;
+            Filtros.RGBparaCMY(imageBitmap, imgDest);
+            pictBoxImg2.Image = imgDest;
+        }
     }
 }

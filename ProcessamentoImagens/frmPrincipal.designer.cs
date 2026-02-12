@@ -35,6 +35,8 @@
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.btnLuminanciaComDMA = new System.Windows.Forms.Button();
             this.btnNegativoComDMA = new System.Windows.Forms.Button();
+            this.CMY = new System.Windows.Forms.Button();
+            this.textBox1 = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictBoxImg1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictBoxImg2)).BeginInit();
             this.SuspendLayout();
@@ -42,22 +44,23 @@
             // pictBoxImg1
             // 
             this.pictBoxImg1.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.pictBoxImg1.Location = new System.Drawing.Point(7, 7);
+            this.pictBoxImg1.Location = new System.Drawing.Point(22, 36);
             this.pictBoxImg1.Margin = new System.Windows.Forms.Padding(4);
             this.pictBoxImg1.Name = "pictBoxImg1";
-            this.pictBoxImg1.Size = new System.Drawing.Size(800, 615);
+            this.pictBoxImg1.Size = new System.Drawing.Size(400, 400);
             this.pictBoxImg1.TabIndex = 102;
             this.pictBoxImg1.TabStop = false;
             // 
             // pictBoxImg2
             // 
             this.pictBoxImg2.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.pictBoxImg2.Location = new System.Drawing.Point(815, 7);
+            this.pictBoxImg2.Location = new System.Drawing.Point(447, 36);
             this.pictBoxImg2.Margin = new System.Windows.Forms.Padding(4);
             this.pictBoxImg2.Name = "pictBoxImg2";
-            this.pictBoxImg2.Size = new System.Drawing.Size(800, 615);
+            this.pictBoxImg2.Size = new System.Drawing.Size(400, 400);
             this.pictBoxImg2.TabIndex = 105;
             this.pictBoxImg2.TabStop = false;
+            this.pictBoxImg2.Click += new System.EventHandler(this.pictBoxImg2_Click);
             // 
             // btnAbrirImagem
             // 
@@ -103,11 +106,32 @@
             this.btnNegativoComDMA.UseVisualStyleBackColor = true;
             this.btnNegativoComDMA.Click += new System.EventHandler(this.btnNegativoComDMA_Click);
             // 
+            // CMY
+            // 
+            this.CMY.Location = new System.Drawing.Point(569, 654);
+            this.CMY.Margin = new System.Windows.Forms.Padding(4);
+            this.CMY.Name = "CMY";
+            this.CMY.Size = new System.Drawing.Size(132, 28);
+            this.CMY.TabIndex = 112;
+            this.CMY.Text = "CMY";
+            this.CMY.UseVisualStyleBackColor = true;
+            this.CMY.Click += new System.EventHandler(this.CMY_Click);
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(22, 7);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(100, 22);
+            this.textBox1.TabIndex = 113;
+            this.textBox1.Text = "Img Original";
+            // 
             // frmPrincipal
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1627, 748);
+            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.CMY);
             this.Controls.Add(this.btnNegativoComDMA);
             this.Controls.Add(this.btnLuminanciaComDMA);
             this.Controls.Add(this.btnLimpar);
@@ -121,6 +145,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictBoxImg1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictBoxImg2)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -133,6 +158,8 @@
         private System.Windows.Forms.OpenFileDialog openFileDialog;
         private System.Windows.Forms.Button btnLuminanciaComDMA;
         private System.Windows.Forms.Button btnNegativoComDMA;
+        private System.Windows.Forms.Button CMY;
+        private System.Windows.Forms.TextBox textBox1;
     }
 }
 
