@@ -9,9 +9,6 @@ namespace ProcessamentoImagens
 {
     class Filtros
     {
-        
-
-        
         //converter pra cinza = luminancia
         public static void luminanciaDMA(Bitmap imageBitmapSrc, Bitmap imageBitmapDest)
         {
@@ -57,8 +54,6 @@ namespace ProcessamentoImagens
             imageBitmapDest.UnlockBits(bitmapDataDst);
         }
 
-
-        //com acesso direito a memoria
         public static void negativoDMA(Bitmap imageBitmapSrc, Bitmap imageBitmapDest)
         {
             int width = imageBitmapSrc.Width;
@@ -101,5 +96,65 @@ namespace ProcessamentoImagens
             //unlock imagem destino
             imageBitmapDest.UnlockBits(bitmapDataDst);
         }
+
+
+        //métodos auxiliares para conversão de RGB para HSI
+
+        //CHAMADA A OUTRAS FUNÇÕES
+
+        //NORMALIZAÇÕES ---------------------> RGB - HSI
+        public static double normalizaR(int R, int G, int B)
+        {
+            return R / (R + G + B);
+        }
+        public static double normalizaG(int R, int G, int B)
+        {
+            return G / (R + G + B);
+        }
+        public static double normalizaB(int R, int G, int B)
+        {
+            return B / (R + G + B);
+        }
+
+        //OBTENÇÃO DOS VALORES CONCRETOS DE HSI -------------> RGB - HSI
+        public static double getH(double r, double g, double b)
+        {
+            double numerador, denominador;
+            numerador = 0.5 * ((r - g) + (r - b));
+            denominador = Math.Pow(Math.Pow(r - g, 2) + (r - b) * (g - b), 0.5);
+
+            if (b<=g)
+            {
+                return Math.Acos(numerador / denominador);
+            }
+            else
+            {
+                return 2 * Math.PI - Math.Acos(numerador / denominador);
+            }
+        }
+        public static double getS(double r, double g, double b)
+        {
+            return 1 - 3 * Math.Min(r, Math.Min(g, b));
+        }
+        public static double getI(int R, int G, int B)
+        {
+            return (R + G + B) / (3 * 255);
+        }
+
+        //CONVERSÃO PARA OS RANGES DE HSI -> [0,360]; [0,100]; [0,255] ------------> RGB - HSI
+        public static double converteH(double h)
+        {
+            return h * 180 / Math.PI;
+        }
+        public static double converteS(double s)
+        {
+            return s * 100;
+        }
+        public static double converteI(double i)
+        {
+            return i * 255;
+        }
+
+
     }
 }

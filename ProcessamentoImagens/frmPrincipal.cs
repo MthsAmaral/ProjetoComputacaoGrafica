@@ -27,7 +27,7 @@ namespace ProcessamentoImagens
             {
                 image = Image.FromFile(openFileDialog.FileName);
                 pictBoxImg1.Image = image;
-                pictBoxImg1.SizeMode = PictureBoxSizeMode.Normal;
+                pictBoxImg1.SizeMode = PictureBoxSizeMode.StretchImage;
             }
         }
 
@@ -43,6 +43,7 @@ namespace ProcessamentoImagens
             imageBitmap = (Bitmap)image;
             Filtros.luminanciaDMA(imageBitmap, imgDest);
             pictBoxImg2.Image = imgDest;
+            pictBoxImg2.SizeMode = PictureBoxSizeMode.StretchImage;
         }
 
         private void btnNegativoComDMA_Click(object sender, EventArgs e)
@@ -51,6 +52,7 @@ namespace ProcessamentoImagens
             imageBitmap = (Bitmap)image;
             Filtros.negativoDMA(imageBitmap, imgDest);
             pictBoxImg2.Image = imgDest;
+            pictBoxImg2.SizeMode = PictureBoxSizeMode.StretchImage;
         }
     }
 }
