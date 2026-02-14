@@ -6,6 +6,8 @@ using System.Text;
 using System.Windows.Forms;
 using System.IO;
 using System.Drawing.Imaging;
+using System.Security.Cryptography.X509Certificates;
+using System.CodeDom;
 
 namespace ProcessamentoImagens
 {
@@ -13,6 +15,9 @@ namespace ProcessamentoImagens
     {
         private Image image;
         private Bitmap imageBitmap;
+        private Classes.Pixel[,] matrizCMY;
+        private Classes.Pixel[,] matrizRGB;
+        private Classes.Pixel[,] matrizHSI;
 
         public frmPrincipal()
         {
@@ -27,8 +32,28 @@ namespace ProcessamentoImagens
             {
                 image = Image.FromFile(openFileDialog.FileName);
                 pictBoxImg1.Image = image;
+
+                //Criar um Bitmap para realizar o calculo e salvamento dos valores nas matrizes:
+                //  - RGB
+                //  - HSI
+                //  - CMY
+                Bitmap imgCalculo = new Bitmap(image);
+                matrizRGB = new Classes.Pixel[imgCalculo.Width, imgCalculo.Height];
+                matrizCMY = new Classes.Pixel[imgCalculo.Width, imgCalculo.Height];
+                matrizHSI = new Classes.Pixel[imgCalculo.Width, imgCalculo.Height];
+                Filtros.CalculaValores(imgCalculo, matrizRGB, matrizCMY, matrizHSI); //matrizes inicializadas com valores calculados
+
+                //depurar
+                Console.WriteLine("Teste");
+
+                //Deixar a imagem esticada para melhor
                 pictBoxImg1.SizeMode = PictureBoxSizeMode.StretchImage;
             }
+        }
+
+        private void esticarImgH()
+        {
+            pictBoxImgH.SizeMode = PictureBoxSizeMode.StretchImage;
         }
 
         private void btnLimpar_Click(object sender, EventArgs e)
@@ -41,32 +66,23 @@ namespace ProcessamentoImagens
         {
             Bitmap imgDest = new Bitmap(image);
             imageBitmap = (Bitmap)image;
-            Filtros.luminanciaDMA(imageBitmap, imgDest);
-<<<<<<< HEAD
-            pictBoxImg2.Image = imgDest;
-            pictBoxImg2.SizeMode = PictureBoxSizeMode.StretchImage;
-=======
+            Filtros.LuminanciaDMA(imageBitmap, imgDest);
             pictBoxImgH.Image = imgDest;
->>>>>>> 9738137b628ee9fb1543826d92d9c1539c8cea58
+            esticarImgH();
         }
 
         private void CMY_Click(object sender, EventArgs e)
         {
             Bitmap imgDest = new Bitmap(image);
             imageBitmap = (Bitmap)image;
-<<<<<<< HEAD
-            Filtros.negativoDMA(imageBitmap, imgDest);
-            pictBoxImg2.Image = imgDest;
-            pictBoxImg2.SizeMode = PictureBoxSizeMode.StretchImage;
-=======
             Filtros.RGBparaCMY(imageBitmap, imgDest);
             pictBoxImgH.Image = imgDest;
+            esticarImgH();
         }
 
         private void buttonHSI_Click(object sender, EventArgs e)
         {
 
->>>>>>> 9738137b628ee9fb1543826d92d9c1539c8cea58
         }
     }
 }

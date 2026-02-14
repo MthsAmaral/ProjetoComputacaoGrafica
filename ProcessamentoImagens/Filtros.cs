@@ -1,22 +1,63 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Text;
+using System.Windows.Forms;
 
 namespace ProcessamentoImagens
 {
     class Filtros
     {
-<<<<<<< HEAD
-=======
+        //calcular os valores das matrizes RGB, CMY e HSI
+        public static void CalculaValores(Bitmap imageBitmap, Classes.Pixel[,] matrizRGB, Classes.Pixel[,] matrizCMY, Classes.Pixel[,] matrizHSI)
+        {
+            int width = imageBitmap.Width;
+            int height = imageBitmap.Height;
+            int pixelSize = 3, b, g, r;
 
+            //travar os bits
+            BitmapData bitmapData = imageBitmap.LockBits(new Rectangle(0, 0, width, height),
+                ImageLockMode.ReadWrite, PixelFormat.Format24bppRgb);
 
+            int padding = bitmapData.Stride - (width * pixelSize);
 
->>>>>>> 9738137b628ee9fb1543826d92d9c1539c8cea58
+            unsafe
+            {
+                byte* origem = (byte*)bitmapData.Scan0.ToPointer();
+                byte* pixel;
+                
+                for (int y = 0; y < height; y++)
+                {
+                    for (int x = 0; x < width; x++)
+                    {
+                        pixel = origem + y * bitmapData.Stride + x * pixelSize;
+
+                        //modo de acesso: BGR
+                        b = *(pixel++);
+                        g = *(pixel++);
+                        r = *(pixel++);
+
+                        matrizRGB[x, y] = new Classes.Pixel(r, g, b);
+                        matrizCMY[x, y] = new Classes.Pixel(255 - r, 255 - g, 255 - b);
+                        matrizHSI[x, y] = new Classes.Pixel(0, 0, 0); //inicialização
+                        matrizHSI[x, y].R = GetH(r, g, b);
+                        matrizHSI[x, y].G = GetS(r, g, b);
+                        matrizHSI[x, y].B = GetI(r, g, b);
+                        //GetRGBparaHSI(r, g, b, matrizHSI[x, y].R, matrizHSI[x, y].G, matrizHSI[x, y].B);
+
+                        //depurar
+                        Console.WriteLine("Teste!");
+                    }
+                }
+                Console.WriteLine("Teste");
+            }
+            imageBitmap.UnlockBits(bitmapData);
+        }
+
         //converter pra cinza = luminancia
-        public static void luminanciaDMA(Bitmap imageBitmapSrc, Bitmap imageBitmapDest)
+        public static void LuminanciaDMA(Bitmap imageBitmapSrc, Bitmap imageBitmapDest)
         {
             int width = imageBitmapSrc.Width;
             int height = imageBitmapSrc.Height;
@@ -56,13 +97,8 @@ namespace ProcessamentoImagens
             imageBitmapDest.UnlockBits(bitmapDataDst);
         }
 
-<<<<<<< HEAD
-        public static void negativoDMA(Bitmap imageBitmapSrc, Bitmap imageBitmapDest)
-=======
 
-        
         public static void RGBparaCMY(Bitmap imageBitmapSrc, Bitmap imageBitmapDest)
->>>>>>> 9738137b628ee9fb1543826d92d9c1539c8cea58
         {
             int width = imageBitmapSrc.Width;
             int height = imageBitmapSrc.Height;
@@ -98,29 +134,80 @@ namespace ProcessamentoImagens
             imageBitmapSrc.UnlockBits(bitmapDataSrc);
             imageBitmapDest.UnlockBits(bitmapDataDst);
         }
-<<<<<<< HEAD
 
 
         //métodos auxiliares para conversão de RGB para HSI
 
         //CHAMADA A OUTRAS FUNÇÕES
+        public static int GetH(int R, int G, int B)
+        {
+            double r, g, b;
+            r = NormalizaR(R, G, B);
+            g = NormalizaG(R, G, B);
+            b = NormalizaB(R, G, B);
+            return ConverteH(ObterH(r, g, b));
+        }
+        public static int GetS(int R, int G, int B)
+        {
+            double r, g, b;
+            r = NormalizaR(R, G, B);
+            g = NormalizaG(R, G, B);
+            b = NormalizaB(R, G, B);
+            return ConverteS(ObterS(r, g, b));
+        }
+        public static int GetI(int R, int G, int B)
+        {
+            double r, g, b;
+            r = NormalizaR(R, G, B);
+            g = NormalizaG(R, G, B);
+            b = NormalizaB(R, G, B);
+            return ConverteI(ObterI(R, G, B));
+        }
+        public static void GetRGBparaHSI(int R, int G, int B, int H, int S, int I)
+        {
+            double r, g, b, h, s, i;
+
+            //normalizar
+            r = NormalizaR(R, G, B);
+            g = NormalizaG(R, G, B);
+            b = NormalizaB(R, G, B);
+
+            //obter os valores concretos de HSI
+            h = ObterH(r, g, b);
+            s = ObterS(r, g, b);
+            i = ObterI(R, G, B);
+
+            //converter para os ranges de HSI -> [0,360]; [0,100]; [0,255]
+            H = ConverteH(h);
+            S = ConverteS(s);
+            I = ConverteI(i);
+        }
 
         //NORMALIZAÇÕES ---------------------> RGB - HSI
-        public static double normalizaR(int R, int G, int B)
+        public static double NormalizaR(int R, int G, int B)
         {
-            return R / (R + G + B);
+            int soma = R + G + B;
+            if (soma > 0)
+                return (double)R / soma;
+            return 0;
         }
-        public static double normalizaG(int R, int G, int B)
+        public static double NormalizaG(int R, int G, int B)
         {
-            return G / (R + G + B);
+            int soma = R + G + B;
+            if (soma > 0)
+                return (double)G / soma;
+            return 0;
         }
-        public static double normalizaB(int R, int G, int B)
+        public static double NormalizaB(int R, int G, int B)
         {
-            return B / (R + G + B);
+            int soma = R + G + B;
+            if (soma > 0)
+                return (double)B / soma;
+            return 0;
         }
 
         //OBTENÇÃO DOS VALORES CONCRETOS DE HSI -------------> RGB - HSI
-        public static double getH(double r, double g, double b)
+        public static double ObterH(double r, double g, double b)
         {
             double numerador, denominador;
             numerador = 0.5 * ((r - g) + (r - b));
@@ -135,37 +222,27 @@ namespace ProcessamentoImagens
                 return 2 * Math.PI - Math.Acos(numerador / denominador);
             }
         }
-        public static double getS(double r, double g, double b)
+        public static double ObterS(double r, double g, double b)
         {
             return 1 - 3 * Math.Min(r, Math.Min(g, b));
         }
-        public static double getI(int R, int G, int B)
+        public static double ObterI(int R, int G, int B)
         {
             return (R + G + B) / (3 * 255);
         }
 
         //CONVERSÃO PARA OS RANGES DE HSI -> [0,360]; [0,100]; [0,255] ------------> RGB - HSI
-        public static double converteH(double h)
+        public static int ConverteH(double h)
         {
-            return h * 180 / Math.PI;
+            return (int)(h * 180 / Math.PI);
         }
-        public static double converteS(double s)
+        public static int ConverteS(double s)
         {
-            return s * 100;
+            return (int)(s * 100);
         }
-        public static double converteI(double i)
+        public static int ConverteI(double i)
         {
-            return i * 255;
+            return (int)(i * 255);
         }
-
-=======
-        public static double NormalizarR(int R,int G,int B)
-        {
-            return R / (R + G + B);
-        }
->>>>>>> 9738137b628ee9fb1543826d92d9c1539c8cea58
-
     }
-
- 
 }
