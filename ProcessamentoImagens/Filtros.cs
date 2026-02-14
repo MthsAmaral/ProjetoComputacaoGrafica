@@ -39,13 +39,17 @@ namespace ProcessamentoImagens
                         g = *(pixel++);
                         r = *(pixel++);
 
+                        //matriz RGB
                         matrizRGB[x, y] = new Classes.Pixel(r, g, b);
+
+                        //matriz CMY
                         matrizCMY[x, y] = new Classes.Pixel(255 - r, 255 - g, 255 - b);
+
+                        //matriz HSI
                         matrizHSI[x, y] = new Classes.Pixel(0, 0, 0); //inicialização
                         matrizHSI[x, y].R = GetH(r, g, b);
                         matrizHSI[x, y].G = GetS(r, g, b);
                         matrizHSI[x, y].B = GetI(r, g, b);
-                        //GetRGBparaHSI(r, g, b, matrizHSI[x, y].R, matrizHSI[x, y].G, matrizHSI[x, y].B);
 
                         //depurar
                         Console.WriteLine("Teste!");
@@ -136,7 +140,7 @@ namespace ProcessamentoImagens
         }
 
 
-        //métodos auxiliares para conversão de RGB para HSI
+        //MÉTODOS auxiliares para conversão de RGB para HSI
 
         //CHAMADA A OUTRAS FUNÇÕES
         public static int GetH(int R, int G, int B)
@@ -162,25 +166,6 @@ namespace ProcessamentoImagens
             g = NormalizaG(R, G, B);
             b = NormalizaB(R, G, B);
             return ConverteI(ObterI(R, G, B));
-        }
-        public static void GetRGBparaHSI(int R, int G, int B, int H, int S, int I)
-        {
-            double r, g, b, h, s, i;
-
-            //normalizar
-            r = NormalizaR(R, G, B);
-            g = NormalizaG(R, G, B);
-            b = NormalizaB(R, G, B);
-
-            //obter os valores concretos de HSI
-            h = ObterH(r, g, b);
-            s = ObterS(r, g, b);
-            i = ObterI(R, G, B);
-
-            //converter para os ranges de HSI -> [0,360]; [0,100]; [0,255]
-            H = ConverteH(h);
-            S = ConverteS(s);
-            I = ConverteI(i);
         }
 
         //NORMALIZAÇÕES ---------------------> RGB - HSI
