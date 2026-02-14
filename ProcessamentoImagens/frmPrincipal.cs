@@ -34,7 +34,7 @@ namespace ProcessamentoImagens
         private void btnLimpar_Click(object sender, EventArgs e)
         {
             pictBoxImg1.Image = null;
-            pictBoxImg2.Image = null;
+            pictBoxImgH.Image = null;
         }
 
         private void btnLuminanciaComDMA_Click(object sender, EventArgs e)
@@ -42,17 +42,31 @@ namespace ProcessamentoImagens
             Bitmap imgDest = new Bitmap(image);
             imageBitmap = (Bitmap)image;
             Filtros.luminanciaDMA(imageBitmap, imgDest);
+<<<<<<< HEAD
             pictBoxImg2.Image = imgDest;
             pictBoxImg2.SizeMode = PictureBoxSizeMode.StretchImage;
+=======
+            pictBoxImgH.Image = imgDest;
+>>>>>>> 9738137b628ee9fb1543826d92d9c1539c8cea58
         }
 
-        private void btnNegativoComDMA_Click(object sender, EventArgs e)
+        private void CMY_Click(object sender, EventArgs e)
         {
             Bitmap imgDest = new Bitmap(image);
             imageBitmap = (Bitmap)image;
+<<<<<<< HEAD
             Filtros.negativoDMA(imageBitmap, imgDest);
             pictBoxImg2.Image = imgDest;
             pictBoxImg2.SizeMode = PictureBoxSizeMode.StretchImage;
+=======
+            Filtros.RGBparaCMY(imageBitmap, imgDest);
+            pictBoxImgH.Image = imgDest;
+        }
+
+        private void buttonHSI_Click(object sender, EventArgs e)
+        {
+
+>>>>>>> 9738137b628ee9fb1543826d92d9c1539c8cea58
         }
     }
 }

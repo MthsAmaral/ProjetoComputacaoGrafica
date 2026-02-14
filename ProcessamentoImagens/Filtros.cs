@@ -9,6 +9,12 @@ namespace ProcessamentoImagens
 {
     class Filtros
     {
+<<<<<<< HEAD
+=======
+
+
+
+>>>>>>> 9738137b628ee9fb1543826d92d9c1539c8cea58
         //converter pra cinza = luminancia
         public static void luminanciaDMA(Bitmap imageBitmapSrc, Bitmap imageBitmapDest)
         {
@@ -17,10 +23,8 @@ namespace ProcessamentoImagens
             int pixelSize = 3;
             Int32 gs;
 
-            //lock dados bitmap origem
             BitmapData bitmapDataSrc = imageBitmapSrc.LockBits(new Rectangle(0, 0, width, height),
                 ImageLockMode.ReadWrite, PixelFormat.Format24bppRgb);
-            //lock dados bitmap destino
             BitmapData bitmapDataDst = imageBitmapDest.LockBits(new Rectangle(0, 0, width, height),
                 ImageLockMode.ReadWrite, PixelFormat.Format24bppRgb);
 
@@ -48,38 +52,38 @@ namespace ProcessamentoImagens
                     dst += padding;
                 }
             }
-            //unlock imagem origem
             imageBitmapSrc.UnlockBits(bitmapDataSrc);
-            //unlock imagem destino
             imageBitmapDest.UnlockBits(bitmapDataDst);
         }
 
+<<<<<<< HEAD
         public static void negativoDMA(Bitmap imageBitmapSrc, Bitmap imageBitmapDest)
+=======
+
+        
+        public static void RGBparaCMY(Bitmap imageBitmapSrc, Bitmap imageBitmapDest)
+>>>>>>> 9738137b628ee9fb1543826d92d9c1539c8cea58
         {
             int width = imageBitmapSrc.Width;
             int height = imageBitmapSrc.Height;
             int pixelSize = 3;
 
-            //lock dados bitmap origem 
             BitmapData bitmapDataSrc = imageBitmapSrc.LockBits(new Rectangle(0, 0, width, height),
-                ImageLockMode.ReadWrite, PixelFormat.Format24bppRgb);
-            //lock dados bitmap destino
+                ImageLockMode.ReadOnly, PixelFormat.Format24bppRgb);
+
             BitmapData bitmapDataDst = imageBitmapDest.LockBits(new Rectangle(0, 0, width, height),
                 ImageLockMode.ReadWrite, PixelFormat.Format24bppRgb);
-
             int padding = bitmapDataSrc.Stride - (width * pixelSize);
-
             unsafe
             {
                 byte* src1 = (byte*)bitmapDataSrc.Scan0.ToPointer();
                 byte* dst = (byte*)bitmapDataDst.Scan0.ToPointer();
-
                 int r, g, b;
                 for (int y = 0; y < height; y++)
                 {
                     for (int x = 0; x < width; x++)
                     {
-                        b = *(src1++); //está armazenado dessa forma: b g r 
+                        b = *(src1++);
                         g = *(src1++);
                         r = *(src1++);
 
@@ -91,11 +95,10 @@ namespace ProcessamentoImagens
                     dst += padding;
                 }
             }
-            //unlock imagem origem 
             imageBitmapSrc.UnlockBits(bitmapDataSrc);
-            //unlock imagem destino
             imageBitmapDest.UnlockBits(bitmapDataDst);
         }
+<<<<<<< HEAD
 
 
         //métodos auxiliares para conversão de RGB para HSI
@@ -155,6 +158,14 @@ namespace ProcessamentoImagens
             return i * 255;
         }
 
+=======
+        public static double NormalizarR(int R,int G,int B)
+        {
+            return R / (R + G + B);
+        }
+>>>>>>> 9738137b628ee9fb1543826d92d9c1539c8cea58
 
     }
+
+ 
 }
