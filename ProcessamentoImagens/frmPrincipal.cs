@@ -11,6 +11,7 @@ namespace ProcessamentoImagens
         private Classes.Pixel[,] matrizCMY;
         private Classes.Pixel[,] matrizRGB;
         private Classes.Pixel[,] matrizHSI;
+        private static int brilho = 15;
 
         public frmPrincipal()
         {
@@ -39,7 +40,7 @@ namespace ProcessamentoImagens
                 //depurar
                 Console.WriteLine("Teste");
 
-                pictBoxImg1.SizeMode = PictureBoxSizeMode.StretchImage;
+                esticarImgH();
             }
         }
 
@@ -131,17 +132,5 @@ namespace ProcessamentoImagens
                 esticarImgH();
             }
         }
-
-        private void btnAumentarBrilho_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void btnDiminuirBrilho_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        
     }
 }
