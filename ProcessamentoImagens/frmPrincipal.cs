@@ -39,7 +39,7 @@ namespace ProcessamentoImagens
                 //depurar
                 Console.WriteLine("Teste");
 
-                esticarImgH();
+                pictBoxImg1.SizeMode = PictureBoxSizeMode.StretchImage;
             }
         }
 
@@ -131,5 +131,17 @@ namespace ProcessamentoImagens
                 esticarImgH();
             }
         }
+
+        private void btnAumentarBrilho_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnDiminuirBrilho_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        
     }
 }

@@ -42,17 +42,23 @@
             this.buttonHSI = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.btnImagemOriginal = new System.Windows.Forms.Button();
+            this.textBoxBrilho = new System.Windows.Forms.TextBox();
+            this.btnDiminuirBrilho = new System.Windows.Forms.Button();
+            this.btnAumentarBrilho = new System.Windows.Forms.Button();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.label1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictBoxImg1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictBoxImgH)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictBoxImgS)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictBoxImgI)).BeginInit();
             this.panel1.SuspendLayout();
+            this.panel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // pictBoxImg1
             // 
             this.pictBoxImg1.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.pictBoxImg1.Location = new System.Drawing.Point(13, 13);
+            this.pictBoxImg1.Location = new System.Drawing.Point(25, 13);
             this.pictBoxImg1.Margin = new System.Windows.Forms.Padding(4);
             this.pictBoxImg1.Name = "pictBoxImg1";
             this.pictBoxImg1.Size = new System.Drawing.Size(660, 600);
@@ -72,6 +78,7 @@
             // 
             // btnAbrirImagem
             // 
+            this.btnAbrirImagem.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnAbrirImagem.Location = new System.Drawing.Point(13, 630);
             this.btnAbrirImagem.Margin = new System.Windows.Forms.Padding(4);
             this.btnAbrirImagem.Name = "btnAbrirImagem";
@@ -83,6 +90,7 @@
             // 
             // btnLimpar
             // 
+            this.btnLimpar.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnLimpar.Location = new System.Drawing.Point(156, 630);
             this.btnLimpar.Margin = new System.Windows.Forms.Padding(4);
             this.btnLimpar.Name = "btnLimpar";
@@ -94,6 +102,7 @@
             // 
             // btnLuminanciaComDMA
             // 
+            this.btnLuminanciaComDMA.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnLuminanciaComDMA.Location = new System.Drawing.Point(429, 630);
             this.btnLuminanciaComDMA.Margin = new System.Windows.Forms.Padding(4);
             this.btnLuminanciaComDMA.Name = "btnLuminanciaComDMA";
@@ -105,6 +114,7 @@
             // 
             // CMY
             // 
+            this.CMY.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.CMY.Location = new System.Drawing.Point(569, 630);
             this.CMY.Margin = new System.Windows.Forms.Padding(4);
             this.CMY.Name = "CMY";
@@ -136,7 +146,7 @@
             // 
             // panel1
             // 
-            this.panel1.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.panel1.BackColor = System.Drawing.SystemColors.AppWorkspace;
             this.panel1.Controls.Add(this.buttonHSI);
             this.panel1.Controls.Add(this.pictBoxImgI);
             this.panel1.Controls.Add(this.pictBoxImgH);
@@ -148,6 +158,7 @@
             // 
             // buttonHSI
             // 
+            this.buttonHSI.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonHSI.Location = new System.Drawing.Point(134, 677);
             this.buttonHSI.Margin = new System.Windows.Forms.Padding(4);
             this.buttonHSI.Name = "buttonHSI";
@@ -159,6 +170,7 @@
             // 
             // btnImagemOriginal
             // 
+            this.btnImagemOriginal.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnImagemOriginal.Location = new System.Drawing.Point(275, 630);
             this.btnImagemOriginal.Margin = new System.Windows.Forms.Padding(4);
             this.btnImagemOriginal.Name = "btnImagemOriginal";
@@ -168,6 +180,59 @@
             this.btnImagemOriginal.Text = "Imagem Original";
             this.btnImagemOriginal.UseVisualStyleBackColor = true;
             this.btnImagemOriginal.Click += new System.EventHandler(this.btnImagemOriginal_Click);
+            // 
+            // textBoxBrilho
+            // 
+            this.textBoxBrilho.Enabled = false;
+            this.textBoxBrilho.Location = new System.Drawing.Point(77, 10);
+            this.textBoxBrilho.Name = "textBoxBrilho";
+            this.textBoxBrilho.Size = new System.Drawing.Size(85, 22);
+            this.textBoxBrilho.TabIndex = 117;
+            // 
+            // btnDiminuirBrilho
+            // 
+            this.btnDiminuirBrilho.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnDiminuirBrilho.Location = new System.Drawing.Point(98, 38);
+            this.btnDiminuirBrilho.Name = "btnDiminuirBrilho";
+            this.btnDiminuirBrilho.Size = new System.Drawing.Size(49, 29);
+            this.btnDiminuirBrilho.TabIndex = 118;
+            this.btnDiminuirBrilho.Text = "-";
+            this.btnDiminuirBrilho.UseVisualStyleBackColor = true;
+            this.btnDiminuirBrilho.Click += new System.EventHandler(this.btnDiminuirBrilho_Click);
+            // 
+            // btnAumentarBrilho
+            // 
+            this.btnAumentarBrilho.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnAumentarBrilho.Location = new System.Drawing.Point(29, 40);
+            this.btnAumentarBrilho.Name = "btnAumentarBrilho";
+            this.btnAumentarBrilho.Size = new System.Drawing.Size(47, 29);
+            this.btnAumentarBrilho.TabIndex = 119;
+            this.btnAumentarBrilho.Text = "+";
+            this.btnAumentarBrilho.UseVisualStyleBackColor = true;
+            this.btnAumentarBrilho.Click += new System.EventHandler(this.btnAumentarBrilho_Click);
+            // 
+            // panel2
+            // 
+            this.panel2.BackColor = System.Drawing.Color.AliceBlue;
+            this.panel2.Controls.Add(this.btnAumentarBrilho);
+            this.panel2.Controls.Add(this.label1);
+            this.panel2.Controls.Add(this.btnDiminuirBrilho);
+            this.panel2.Controls.Add(this.textBoxBrilho);
+            this.panel2.Location = new System.Drawing.Point(331, 665);
+            this.panel2.Name = "panel2";
+            this.panel2.Padding = new System.Windows.Forms.Padding(2);
+            this.panel2.Size = new System.Drawing.Size(191, 74);
+            this.panel2.TabIndex = 120;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(20, 13);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(51, 16);
+            this.label1.TabIndex = 119;
+            this.label1.Text = "Brilho:";
             // 
             // frmPrincipal
             // 
@@ -181,6 +246,7 @@
             this.Controls.Add(this.btnAbrirImagem);
             this.Controls.Add(this.pictBoxImg1);
             this.Controls.Add(this.panel1);
+            this.Controls.Add(this.panel2);
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "frmPrincipal";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -190,6 +256,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictBoxImgS)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictBoxImgI)).EndInit();
             this.panel1.ResumeLayout(false);
+            this.panel2.ResumeLayout(false);
+            this.panel2.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -209,5 +277,10 @@
         private System.Windows.Forms.Button buttonHSI;
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.Button btnImagemOriginal;
+        private System.Windows.Forms.TextBox textBoxBrilho;
+        private System.Windows.Forms.Button btnDiminuirBrilho;
+        private System.Windows.Forms.Button btnAumentarBrilho;
+        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.Label label1;
     }
 }
