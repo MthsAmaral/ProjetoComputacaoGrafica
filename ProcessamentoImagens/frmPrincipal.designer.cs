@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.pictBoxImg1 = new System.Windows.Forms.PictureBox();
             this.pictBoxImgH = new System.Windows.Forms.PictureBox();
             this.btnAbrirImagem = new System.Windows.Forms.Button();
@@ -36,13 +37,15 @@
             this.btnLuminanciaComDMA = new System.Windows.Forms.Button();
             this.CMY = new System.Windows.Forms.Button();
             this.pictBoxImgS = new System.Windows.Forms.PictureBox();
-            this.pictBoImgI = new System.Windows.Forms.PictureBox();
+            this.pictBoxImgI = new System.Windows.Forms.PictureBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.buttonHSI = new System.Windows.Forms.Button();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.btnImagemOriginal = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictBoxImg1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictBoxImgH)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictBoxImgS)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictBoImgI)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictBoxImgI)).BeginInit();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -55,6 +58,7 @@
             this.pictBoxImg1.Size = new System.Drawing.Size(660, 600);
             this.pictBoxImg1.TabIndex = 102;
             this.pictBoxImg1.TabStop = false;
+            this.pictBoxImg1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictBoxImg1_MouseMove);
             // 
             // pictBoxImgH
             // 
@@ -120,21 +124,21 @@
             this.pictBoxImgS.TabIndex = 113;
             this.pictBoxImgS.TabStop = false;
             // 
-            // pictBoImgI
+            // pictBoxImgI
             // 
-            this.pictBoImgI.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.pictBoImgI.Location = new System.Drawing.Point(43, 469);
-            this.pictBoImgI.Margin = new System.Windows.Forms.Padding(4);
-            this.pictBoImgI.Name = "pictBoImgI";
-            this.pictBoImgI.Size = new System.Drawing.Size(300, 200);
-            this.pictBoImgI.TabIndex = 114;
-            this.pictBoImgI.TabStop = false;
+            this.pictBoxImgI.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.pictBoxImgI.Location = new System.Drawing.Point(43, 469);
+            this.pictBoxImgI.Margin = new System.Windows.Forms.Padding(4);
+            this.pictBoxImgI.Name = "pictBoxImgI";
+            this.pictBoxImgI.Size = new System.Drawing.Size(300, 200);
+            this.pictBoxImgI.TabIndex = 114;
+            this.pictBoxImgI.TabStop = false;
             // 
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.panel1.Controls.Add(this.buttonHSI);
-            this.panel1.Controls.Add(this.pictBoImgI);
+            this.panel1.Controls.Add(this.pictBoxImgI);
             this.panel1.Controls.Add(this.pictBoxImgH);
             this.panel1.Controls.Add(this.pictBoxImgS);
             this.panel1.Location = new System.Drawing.Point(762, 13);
@@ -153,11 +157,24 @@
             this.buttonHSI.UseVisualStyleBackColor = true;
             this.buttonHSI.Click += new System.EventHandler(this.buttonHSI_Click);
             // 
+            // btnImagemOriginal
+            // 
+            this.btnImagemOriginal.Location = new System.Drawing.Point(275, 630);
+            this.btnImagemOriginal.Margin = new System.Windows.Forms.Padding(4);
+            this.btnImagemOriginal.Name = "btnImagemOriginal";
+            this.btnImagemOriginal.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.btnImagemOriginal.Size = new System.Drawing.Size(132, 28);
+            this.btnImagemOriginal.TabIndex = 116;
+            this.btnImagemOriginal.Text = "Imagem Original";
+            this.btnImagemOriginal.UseVisualStyleBackColor = true;
+            this.btnImagemOriginal.Click += new System.EventHandler(this.btnImagemOriginal_Click);
+            // 
             // frmPrincipal
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1175, 745);
+            this.Controls.Add(this.btnImagemOriginal);
             this.Controls.Add(this.CMY);
             this.Controls.Add(this.btnLuminanciaComDMA);
             this.Controls.Add(this.btnLimpar);
@@ -171,7 +188,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictBoxImg1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictBoxImgH)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictBoxImgS)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictBoImgI)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictBoxImgI)).EndInit();
             this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -187,8 +204,10 @@
         private System.Windows.Forms.Button btnLuminanciaComDMA;
         private System.Windows.Forms.Button CMY;
         private System.Windows.Forms.PictureBox pictBoxImgS;
-        private System.Windows.Forms.PictureBox pictBoImgI;
+        private System.Windows.Forms.PictureBox pictBoxImgI;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button buttonHSI;
+        private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.Button btnImagemOriginal;
     }
 }

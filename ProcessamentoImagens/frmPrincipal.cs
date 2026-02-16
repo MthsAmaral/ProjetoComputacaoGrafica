@@ -1,13 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
-using System.IO;
-using System.Drawing.Imaging;
-using System.Security.Cryptography.X509Certificates;
-using System.CodeDom;
 
 namespace ProcessamentoImagens
 {
@@ -46,8 +39,7 @@ namespace ProcessamentoImagens
                 //depurar
                 Console.WriteLine("Teste");
 
-                //Deixar a imagem esticada para melhor
-                pictBoxImg1.SizeMode = PictureBoxSizeMode.StretchImage;
+                esticarImgH();
             }
         }
 
@@ -58,31 +50,86 @@ namespace ProcessamentoImagens
 
         private void btnLimpar_Click(object sender, EventArgs e)
         {
+            image = null;
+            imageBitmap = null;
             pictBoxImg1.Image = null;
+            pictBoxImgS.Image = null;
             pictBoxImgH.Image = null;
+            pictBoxImgI.Image = null;
         }
 
         private void btnLuminanciaComDMA_Click(object sender, EventArgs e)
         {
-            Bitmap imgDest = new Bitmap(image);
-            imageBitmap = (Bitmap)image;
-            Filtros.LuminanciaDMA(imageBitmap, imgDest);
-            pictBoxImgH.Image = imgDest;
-            esticarImgH();
+            if(image != null)
+            {
+                Bitmap imgDest = new Bitmap(image);
+                imageBitmap = (Bitmap)image;
+                Filtros.LuminanciaDMA(imageBitmap, imgDest);
+                pictBoxImg1.Image = imgDest;
+                esticarImgH();
+            }
         }
 
         private void CMY_Click(object sender, EventArgs e)
         {
-            Bitmap imgDest = new Bitmap(image);
-            imageBitmap = (Bitmap)image;
-            Filtros.RGBparaCMY(imageBitmap, imgDest);
-            pictBoxImgH.Image = imgDest;
-            esticarImgH();
+            if(image != null)
+            {
+                Bitmap imgDest = new Bitmap(image);
+                imageBitmap = (Bitmap)image;
+                Filtros.RGBparaCMY(imageBitmap, imgDest);
+                pictBoxImg1.Image = imgDest;
+                esticarImgH();
+            }
         }
 
         private void buttonHSI_Click(object sender, EventArgs e)
         {
+            if(image != null)
+            {
+                imageBitmap = (Bitmap)image;
 
+                Bitmap imgDestH = new Bitmap(image);
+                Bitmap imgDestS = new Bitmap(image);
+                Bitmap imgDestI = new Bitmap(image);
+
+                Filtros.GerarImagensHSI(imgDestH, imgDestS, imgDestI, matrizHSI);
+
+                pictBoxImgH.Image = imgDestH;
+                pictBoxImgS.Image = imgDestS;
+                pictBoxImgI.Image = imgDestI;
+            }
+        }
+
+        private void pictBoxImg1_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (pictBoxImg1.Image != null)
+            {
+                int imgX = e.X * pictBoxImg1.Image.Width / pictBoxImg1.Width;
+                int imgY = e.Y * pictBoxImg1.Image.Height / pictBoxImg1.Height;
+
+                if (imgX >= 0 && imgX < pictBoxImg1.Image.Width &&
+                    imgY >= 0 && imgY < pictBoxImg1.Image.Height)
+                {
+                 
+                    string texto =
+                        $"Pixel: ({imgX}, {imgY})\n" +
+                        $"RGB: ({matrizRGB[imgX, imgY].R},{matrizRGB[imgX, imgY].G}, {matrizRGB[imgX, imgY].B})  " +
+                        $"CMY: ({matrizCMY[imgX, imgY].R}, {matrizCMY[imgX, imgY].G}, {matrizCMY[imgX, imgY].B})  " +
+                        $"HSI: ({matrizHSI[imgX, imgY].R}, {matrizHSI[imgX, imgY].G}, {matrizHSI[imgX, imgY].B})";
+
+                    //(mensagem,onde mostrar, posição perto do mouse, tempo)
+                    toolTip1.Show(texto, pictBoxImg1, e.Location.X + 15, e.Location.Y + 15,1000);
+                }
+            }
+        }
+
+        private void btnImagemOriginal_Click(object sender, EventArgs e)
+        {
+            if(image != null)
+            {
+                pictBoxImg1.Image = image;
+                esticarImgH();
+            }
         }
     }
 }
