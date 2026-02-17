@@ -300,6 +300,7 @@
             this.btnAumentarHue.TabIndex = 119;
             this.btnAumentarHue.Text = "+";
             this.btnAumentarHue.UseVisualStyleBackColor = true;
+            this.btnAumentarHue.Click += new System.EventHandler(this.btnAumentarHue_Click);
             // 
             // label5
             // 
@@ -322,6 +323,7 @@
             this.btnDiminuirHue.TabIndex = 118;
             this.btnDiminuirHue.Text = "-";
             this.btnDiminuirHue.UseVisualStyleBackColor = true;
+            this.btnDiminuirHue.Click += new System.EventHandler(this.btnDiminuirHue_Click);
             // 
             // textBoxHue
             // 

@@ -46,7 +46,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Classes\Pixel.cs" />
+    <Compile Include="Classes\PixelRGB.cs" />
+    <Compile Include="Classes\PixelCMY.cs" />
+    <Compile Include="Classes\PixelHSI.cs" />
     <Compile Include="Filtros.cs" />
     <Compile Include="frmPrincipal.cs">
       <SubType>Form</SubType>

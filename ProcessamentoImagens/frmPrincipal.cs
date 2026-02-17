@@ -10,10 +10,10 @@ namespace ProcessamentoImagens
     {
         private Image image, imageOriginal;
         private Bitmap imageBitmap;
-        private Classes.Pixel[,] matrizCMY;
-        private Classes.Pixel[,] matrizRGB;
-        private Classes.Pixel[,] matrizHSI;
-        private int brilho = 15;
+        private PixelCMY[,] matrizCMY;
+        private PixelRGB[,] matrizRGB;
+        private PixelHSI[,] matrizHSI;
+        private int brilho = 15, matiz = 15;
 
         public frmPrincipal()
         {
@@ -35,9 +35,9 @@ namespace ProcessamentoImagens
                 //  - HSI
                 //  - CMY
                 Bitmap imgCalculo = new Bitmap(image);
-                matrizRGB = new Pixel[imgCalculo.Width, imgCalculo.Height];
-                matrizCMY = new Pixel[imgCalculo.Width, imgCalculo.Height];
-                matrizHSI = new Pixel[imgCalculo.Width, imgCalculo.Height];
+                matrizRGB = new PixelRGB[imgCalculo.Width, imgCalculo.Height];
+                matrizCMY = new PixelCMY[imgCalculo.Width, imgCalculo.Height];
+                matrizHSI = new PixelHSI[imgCalculo.Width, imgCalculo.Height];
                 Filtros.CalculaValores(imgCalculo, matrizRGB, matrizCMY, matrizHSI); //matrizes inicializadas com valores calculados
 
                 //atualizar o valor do brilho no campo de texto
@@ -50,14 +50,27 @@ namespace ProcessamentoImagens
             }
         }
 
-        private int CalculaBrilhoMedio()
+        private double CalculaBrilhoMedio()
         {
-            int soma = 0;
+            double soma = 0;
             for (int y = 0; y < image.Height; y++)
             {
                 for (int x = 0; x < image.Width; x++)
                 {
-                    soma += matrizHSI[x, y].B; //B -> equivalente ao 'I' -> brilho do HSI
+                    soma += matrizHSI[x, y].I; //B -> equivalente ao 'I' -> brilho do HSI
+                }
+            }
+            return soma / (image.Height * image.Width);
+        }
+
+        private double CalculaHueMedio()
+        {
+            double soma = 0;
+            for (int y = 0; y < image.Height; y++)
+            {
+                for (int x = 0; x < image.Width; x++)
+                {
+                    soma += matrizHSI[x, y].H; //R -> equivalente ao 'H' -> angulo de cores
                 }
             }
             return soma / (image.Height * image.Width);
@@ -112,13 +125,16 @@ namespace ProcessamentoImagens
                 Bitmap imgDestS = new Bitmap(image);
                 Bitmap imgDestI = new Bitmap(image);
 
-                /*Filtros.GerarImagensH(imgDestH, matrizHSI);
-                Filtros.GerarImagensS(imgDestS, matrizHSI);
-                Filtros.GerarImagensI(imgDestI, matrizHSI);*/
+                Filtros.CinzaHSI_Canal(imgDestH, matrizHSI, matrizRGB, 'H');
+                Filtros.CinzaHSI_Canal(imgDestS, matrizHSI, matrizRGB, 'S');
+                Filtros.CinzaHSI_Canal(imgDestI, matrizHSI, matrizRGB, 'I');
 
                 pictBoxImgH.Image = imgDestH;
+                pictBoxImgH.SizeMode = PictureBoxSizeMode.StretchImage;
                 pictBoxImgS.Image = imgDestS;
+                pictBoxImgS.SizeMode = PictureBoxSizeMode.StretchImage;
                 pictBoxImgI.Image = imgDestI;
+                pictBoxImgI.SizeMode = PictureBoxSizeMode.StretchImage;
             }
         }
 
@@ -136,8 +152,8 @@ namespace ProcessamentoImagens
                     string texto =
                         $"Pixel: ({imgX}, {imgY})\n" +
                         $"RGB: ({matrizRGB[imgX, imgY].R},{matrizRGB[imgX, imgY].G}, {matrizRGB[imgX, imgY].B})  " +
-                        $"CMY: ({matrizCMY[imgX, imgY].R}, {matrizCMY[imgX, imgY].G}, {matrizCMY[imgX, imgY].B})  " +
-                        $"HSI: ({matrizHSI[imgX, imgY].R}, {matrizHSI[imgX, imgY].G}, {matrizHSI[imgX, imgY].B})";
+                        $"CMY: ({matrizCMY[imgX, imgY].C}, {matrizCMY[imgX, imgY].M}, {matrizCMY[imgX, imgY].Y})  " +
+                        $"HSI: ({matrizHSI[imgX, imgY].H}, {matrizHSI[imgX, imgY].S}, {matrizHSI[imgX, imgY].I})";
 
                     //(mensagem,onde mostrar, posição perto do mouse, tempo)
                     toolTip1.Show(texto, pictBoxImg1, e.Location.X + 15, e.Location.Y + 15,1000);
@@ -165,7 +181,6 @@ namespace ProcessamentoImagens
 
                 textBoxBrilho.Text = CalculaBrilhoMedio().ToString();
             }
-            
         }
 
         private void btnCinzaHSI_Click(object sender, EventArgs e)
@@ -177,10 +192,35 @@ namespace ProcessamentoImagens
                 Bitmap imgDest = new Bitmap(image);
                 
 
-                Filtros.CinzaHSI(imgDest, matrizHSI,matrizRGB);
+                Filtros.CinzaHSI(imgDest, matrizHSI, matrizRGB);
 
                 pictBoxImg1.Image = imgDest;
-                
+            }
+        }
+
+        private void btnAumentarHue_Click(object sender, EventArgs e)
+        {
+            Bitmap imgBitmap = new Bitmap(image);
+            if (image != null)
+            {
+                Filtros.AjustarHue(imgBitmap, matiz, matrizRGB, matrizCMY, matrizHSI, true); //o true aumenta o angulo da matiz
+                pictBoxImg1.Image = imgBitmap;
+                image = imgBitmap;
+
+                textBoxHue.Text = CalculaHueMedio().ToString();
+            }
+        }
+
+        private void btnDiminuirHue_Click(object sender, EventArgs e)
+        {
+            Bitmap imgBitmap = new Bitmap(image);
+            if (image != null)
+            {
+                Filtros.AjustarHue(imgBitmap, matiz, matrizRGB, matrizCMY, matrizHSI, false); //o false diminui o angulo da matiz
+                pictBoxImg1.Image = imgBitmap;
+                image = imgBitmap;
+
+                textBoxHue.Text = CalculaHueMedio().ToString();
             }
         }
 
