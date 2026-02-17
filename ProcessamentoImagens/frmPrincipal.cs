@@ -8,12 +8,12 @@ namespace ProcessamentoImagens
 {
     public partial class frmPrincipal : Form
     {
-        private Image image;
+        private Image image, imageOriginal;
         private Bitmap imageBitmap;
         private Classes.Pixel[,] matrizCMY;
         private Classes.Pixel[,] matrizRGB;
         private Classes.Pixel[,] matrizHSI;
-        private static int brilho = 15;
+        private int brilho = 15;
 
         public frmPrincipal()
         {
@@ -27,6 +27,7 @@ namespace ProcessamentoImagens
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
                 image = Image.FromFile(openFileDialog.FileName);
+                imageOriginal = image;//somente para salvar imagem original, caso queira voltar a ela
                 pictBoxImg1.Image = image;
 
                 //Criar um Bitmap para realizar o calculo e salvamento dos valores nas matrizes:
@@ -34,9 +35,9 @@ namespace ProcessamentoImagens
                 //  - HSI
                 //  - CMY
                 Bitmap imgCalculo = new Bitmap(image);
-                matrizRGB = new Classes.Pixel[imgCalculo.Width, imgCalculo.Height];
-                matrizCMY = new Classes.Pixel[imgCalculo.Width, imgCalculo.Height];
-                matrizHSI = new Classes.Pixel[imgCalculo.Width, imgCalculo.Height];
+                matrizRGB = new Pixel[imgCalculo.Width, imgCalculo.Height];
+                matrizCMY = new Pixel[imgCalculo.Width, imgCalculo.Height];
+                matrizHSI = new Pixel[imgCalculo.Width, imgCalculo.Height];
                 Filtros.CalculaValores(imgCalculo, matrizRGB, matrizCMY, matrizHSI); //matrizes inicializadas com valores calculados
 
                 //atualizar o valor do brilho no campo de texto
@@ -45,7 +46,7 @@ namespace ProcessamentoImagens
                 //depurar
                 Console.WriteLine("Teste");
 
-                esticarImgH();
+                pictBoxImg1.SizeMode = PictureBoxSizeMode.StretchImage;
             }
         }
 
@@ -111,7 +112,9 @@ namespace ProcessamentoImagens
                 Bitmap imgDestS = new Bitmap(image);
                 Bitmap imgDestI = new Bitmap(image);
 
-                Filtros.GerarImagensHSI(imgDestH, imgDestS, imgDestI, matrizHSI);
+                /*Filtros.GerarImagensH(imgDestH, matrizHSI);
+                Filtros.GerarImagensS(imgDestS, matrizHSI);
+                Filtros.GerarImagensI(imgDestI, matrizHSI);*/
 
                 pictBoxImgH.Image = imgDestH;
                 pictBoxImgS.Image = imgDestS;
@@ -146,7 +149,7 @@ namespace ProcessamentoImagens
         {
             if(image != null)
             {
-                pictBoxImg1.Image = image;
+                pictBoxImg1.Image = imageOriginal;
                 esticarImgH();
             }
         }
@@ -157,8 +160,28 @@ namespace ProcessamentoImagens
             if (image != null)
             {
                 Filtros.AjustarBrilho(imgBitmap, brilho, matrizRGB, matrizCMY, matrizHSI, true); //o true aumenta o brilho
+                pictBoxImg1.Image = imgBitmap;
+                image = imgBitmap;
+
+                textBoxBrilho.Text = CalculaBrilhoMedio().ToString();
             }
             
+        }
+
+        private void btnCinzaHSI_Click(object sender, EventArgs e)
+        {
+            if (image != null)
+            {
+                imageBitmap = (Bitmap)image;
+
+                Bitmap imgDest = new Bitmap(image);
+                
+
+                Filtros.CinzaHSI(imgDest, matrizHSI,matrizRGB);
+
+                pictBoxImg1.Image = imgDest;
+                
+            }
         }
 
         private void btnDiminuirBrilho_Click(object sender, EventArgs e)
@@ -167,6 +190,10 @@ namespace ProcessamentoImagens
             if (image != null)
             {
                 Filtros.AjustarBrilho(imgBitmap, brilho, matrizRGB, matrizCMY, matrizHSI, false); //o false diminui o brilho
+                pictBoxImg1.Image = imgBitmap;
+                image = imgBitmap;
+
+                textBoxBrilho.Text = CalculaBrilhoMedio().ToString();
             }
         }
     }

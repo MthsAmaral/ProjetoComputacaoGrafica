@@ -39,6 +39,9 @@
             this.pictBoxImgS = new System.Windows.Forms.PictureBox();
             this.pictBoxImgI = new System.Windows.Forms.PictureBox();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             this.buttonHSI = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.btnImagemOriginal = new System.Windows.Forms.Button();
@@ -47,12 +50,19 @@
             this.btnAumentarBrilho = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
+            this.panel3 = new System.Windows.Forms.Panel();
+            this.btnAumentarHue = new System.Windows.Forms.Button();
+            this.label5 = new System.Windows.Forms.Label();
+            this.btnDiminuirHue = new System.Windows.Forms.Button();
+            this.textBoxHue = new System.Windows.Forms.TextBox();
+            this.btnCinzaHSI = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictBoxImg1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictBoxImgH)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictBoxImgS)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictBoxImgI)).BeginInit();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
+            this.panel3.SuspendLayout();
             this.SuspendLayout();
             // 
             // pictBoxImg1
@@ -99,7 +109,7 @@
             // btnLuminanciaComDMA
             // 
             this.btnLuminanciaComDMA.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnLuminanciaComDMA.Location = new System.Drawing.Point(322, 512);
+            this.btnLuminanciaComDMA.Location = new System.Drawing.Point(248, 512);
             this.btnLuminanciaComDMA.Name = "btnLuminanciaComDMA";
             this.btnLuminanciaComDMA.Size = new System.Drawing.Size(99, 23);
             this.btnLuminanciaComDMA.TabIndex = 109;
@@ -110,7 +120,7 @@
             // CMY
             // 
             this.CMY.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.CMY.Location = new System.Drawing.Point(427, 512);
+            this.CMY.Location = new System.Drawing.Point(353, 512);
             this.CMY.Name = "CMY";
             this.CMY.Size = new System.Drawing.Size(99, 23);
             this.CMY.TabIndex = 112;
@@ -139,15 +149,51 @@
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.SystemColors.AppWorkspace;
+            this.panel1.Controls.Add(this.label4);
+            this.panel1.Controls.Add(this.label3);
+            this.panel1.Controls.Add(this.label2);
             this.panel1.Controls.Add(this.buttonHSI);
             this.panel1.Controls.Add(this.pictBoxImgI);
             this.panel1.Controls.Add(this.pictBoxImgH);
             this.panel1.Controls.Add(this.pictBoxImgS);
             this.panel1.Location = new System.Drawing.Point(572, 11);
-            this.panel1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.panel1.Margin = new System.Windows.Forms.Padding(2);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(287, 590);
             this.panel1.TabIndex = 115;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.Location = new System.Drawing.Point(7, 381);
+            this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(15, 13);
+            this.label4.TabIndex = 122;
+            this.label4.Text = "I:";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(7, 193);
+            this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(19, 13);
+            this.label3.TabIndex = 121;
+            this.label3.Text = "S:";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(7, 12);
+            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(20, 13);
+            this.label2.TabIndex = 120;
+            this.label2.Text = "H:";
             // 
             // buttonHSI
             // 
@@ -163,10 +209,10 @@
             // btnImagemOriginal
             // 
             this.btnImagemOriginal.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnImagemOriginal.Location = new System.Drawing.Point(206, 512);
+            this.btnImagemOriginal.Location = new System.Drawing.Point(10, 548);
             this.btnImagemOriginal.Name = "btnImagemOriginal";
             this.btnImagemOriginal.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.btnImagemOriginal.Size = new System.Drawing.Size(99, 23);
+            this.btnImagemOriginal.Size = new System.Drawing.Size(120, 23);
             this.btnImagemOriginal.TabIndex = 116;
             this.btnImagemOriginal.Text = "Imagem Original";
             this.btnImagemOriginal.UseVisualStyleBackColor = true;
@@ -176,7 +222,7 @@
             // 
             this.textBoxBrilho.Enabled = false;
             this.textBoxBrilho.Location = new System.Drawing.Point(58, 8);
-            this.textBoxBrilho.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.textBoxBrilho.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxBrilho.Name = "textBoxBrilho";
             this.textBoxBrilho.Size = new System.Drawing.Size(65, 20);
             this.textBoxBrilho.TabIndex = 117;
@@ -185,7 +231,7 @@
             // 
             this.btnDiminuirBrilho.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnDiminuirBrilho.Location = new System.Drawing.Point(74, 31);
-            this.btnDiminuirBrilho.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnDiminuirBrilho.Margin = new System.Windows.Forms.Padding(2);
             this.btnDiminuirBrilho.Name = "btnDiminuirBrilho";
             this.btnDiminuirBrilho.Size = new System.Drawing.Size(37, 24);
             this.btnDiminuirBrilho.TabIndex = 118;
@@ -197,7 +243,7 @@
             // 
             this.btnAumentarBrilho.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnAumentarBrilho.Location = new System.Drawing.Point(22, 32);
-            this.btnAumentarBrilho.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnAumentarBrilho.Margin = new System.Windows.Forms.Padding(2);
             this.btnAumentarBrilho.Name = "btnAumentarBrilho";
             this.btnAumentarBrilho.Size = new System.Drawing.Size(35, 24);
             this.btnAumentarBrilho.TabIndex = 119;
@@ -213,7 +259,7 @@
             this.panel2.Controls.Add(this.btnDiminuirBrilho);
             this.panel2.Controls.Add(this.textBoxBrilho);
             this.panel2.Location = new System.Drawing.Point(248, 540);
-            this.panel2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.panel2.Margin = new System.Windows.Forms.Padding(2);
             this.panel2.Name = "panel2";
             this.panel2.Padding = new System.Windows.Forms.Padding(2);
             this.panel2.Size = new System.Drawing.Size(143, 60);
@@ -230,11 +276,80 @@
             this.label1.TabIndex = 119;
             this.label1.Text = "Brilho:";
             // 
+            // panel3
+            // 
+            this.panel3.BackColor = System.Drawing.Color.CornflowerBlue;
+            this.panel3.Controls.Add(this.btnAumentarHue);
+            this.panel3.Controls.Add(this.label5);
+            this.panel3.Controls.Add(this.btnDiminuirHue);
+            this.panel3.Controls.Add(this.textBoxHue);
+            this.panel3.Location = new System.Drawing.Point(405, 540);
+            this.panel3.Margin = new System.Windows.Forms.Padding(2);
+            this.panel3.Name = "panel3";
+            this.panel3.Padding = new System.Windows.Forms.Padding(2);
+            this.panel3.Size = new System.Drawing.Size(143, 60);
+            this.panel3.TabIndex = 121;
+            // 
+            // btnAumentarHue
+            // 
+            this.btnAumentarHue.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnAumentarHue.Location = new System.Drawing.Point(22, 32);
+            this.btnAumentarHue.Margin = new System.Windows.Forms.Padding(2);
+            this.btnAumentarHue.Name = "btnAumentarHue";
+            this.btnAumentarHue.Size = new System.Drawing.Size(35, 24);
+            this.btnAumentarHue.TabIndex = 119;
+            this.btnAumentarHue.Text = "+";
+            this.btnAumentarHue.UseVisualStyleBackColor = true;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.Location = new System.Drawing.Point(7, 11);
+            this.label5.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(70, 13);
+            this.label5.TabIndex = 119;
+            this.label5.Text = "Matiz/Hue:";
+            // 
+            // btnDiminuirHue
+            // 
+            this.btnDiminuirHue.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnDiminuirHue.Location = new System.Drawing.Point(74, 31);
+            this.btnDiminuirHue.Margin = new System.Windows.Forms.Padding(2);
+            this.btnDiminuirHue.Name = "btnDiminuirHue";
+            this.btnDiminuirHue.Size = new System.Drawing.Size(37, 24);
+            this.btnDiminuirHue.TabIndex = 118;
+            this.btnDiminuirHue.Text = "-";
+            this.btnDiminuirHue.UseVisualStyleBackColor = true;
+            // 
+            // textBoxHue
+            // 
+            this.textBoxHue.Enabled = false;
+            this.textBoxHue.Location = new System.Drawing.Point(81, 8);
+            this.textBoxHue.Margin = new System.Windows.Forms.Padding(2);
+            this.textBoxHue.Name = "textBoxHue";
+            this.textBoxHue.Size = new System.Drawing.Size(43, 20);
+            this.textBoxHue.TabIndex = 117;
+            // 
+            // btnCinzaHSI
+            // 
+            this.btnCinzaHSI.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnCinzaHSI.Location = new System.Drawing.Point(135, 577);
+            this.btnCinzaHSI.Name = "btnCinzaHSI";
+            this.btnCinzaHSI.Size = new System.Drawing.Size(99, 23);
+            this.btnCinzaHSI.TabIndex = 122;
+            this.btnCinzaHSI.Text = "Cinza(HSI)";
+            this.btnCinzaHSI.UseVisualStyleBackColor = true;
+            this.btnCinzaHSI.Click += new System.EventHandler(this.btnCinzaHSI_Click);
+            // 
             // frmPrincipal
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(881, 605);
+            this.Controls.Add(this.btnCinzaHSI);
+            this.Controls.Add(this.panel3);
             this.Controls.Add(this.btnImagemOriginal);
             this.Controls.Add(this.CMY);
             this.Controls.Add(this.btnLuminanciaComDMA);
@@ -251,8 +366,11 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictBoxImgS)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictBoxImgI)).EndInit();
             this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
+            this.panel3.ResumeLayout(false);
+            this.panel3.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -277,5 +395,14 @@
         private System.Windows.Forms.Button btnAumentarBrilho;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Panel panel3;
+        private System.Windows.Forms.Button btnAumentarHue;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Button btnDiminuirHue;
+        private System.Windows.Forms.TextBox textBoxHue;
+        private System.Windows.Forms.Button btnCinzaHSI;
     }
 }

@@ -5,6 +5,7 @@ using System.Drawing.Imaging;
 
 namespace ProcessamentoImagens
 {
+    
     class Filtros
     {
         //aumentar o brilho da imagem
@@ -26,19 +27,33 @@ namespace ProcessamentoImagens
                     for (int x = 0; x < width; x++)
                     {
                         pixel = origem + y * bitmapData.Stride + x * pixelSize;
-                        
-                        if(aumenta)
-                            matrizHSI[y, x].B = matrizHSI[y, x].B + valorBrilho; //aumentar o brilho na matriz HSI -> campo 'I'
-                        else //diminui
-                            matrizHSI[y, x].B = matrizHSI[y, x].B - valorBrilho; //diminuir o brilho na matriz HSI -> campo 'I'
 
-                        int r=0, g=0, b=0;
-                        HSIparaRGB(matrizHSI[y, x].R, matrizHSI[y, x].G, matrizHSI[y, x].B, ref r, ref g, ref b);
+                        double fator;
+                        int novoI;
+
+                        if (aumenta)
+                        {
+                            fator = 1 + (valorBrilho / 100.0); //calcular o fator de aumento do brilho
+                        }
+                        else //diminui
+                        {
+                            fator = 1 - (valorBrilho / 100.0); //calcular o fator de diminuição do brilho
+                        }
+
+                        novoI = (int)(matrizHSI[x, y].B * fator);
+
+                        if (novoI > 255) novoI = 255; //limitar o valor máximo do brilho a 255
+                        if (novoI < 0) novoI = 0; //limitar o valor mínimo do brilho a 0
+
+                        matrizHSI[x, y].B = novoI;
+
+                        int r = 0, g = 0, b = 0;
+                        HSIparaRGB(matrizHSI[x, y].R, matrizHSI[x, y].G, matrizHSI[x, y].B, ref r, ref g, ref b);
 
                         //atualizar a matriz de RGB
-                        matrizRGB[y, x].R = r;
-                        matrizRGB[y, x].G = g;
-                        matrizRGB[y, x].B = b;
+                        matrizRGB[x, y].R = r;
+                        matrizRGB[x, y].G = g;
+                        matrizRGB[x, y].B = b;
 
                         //atualizar a imagem com os novos valores de RGB
                         pixel[0] = (byte)b;
@@ -52,15 +67,15 @@ namespace ProcessamentoImagens
             imageBitmap.UnlockBits(bitmapData);
         }
 
-        public static void AtualizarMatrizCMY(Pixel[,]  matrizCMY, Pixel[,]  matrizRGB, int width, int height)
+        public static void AtualizarMatrizCMY(Pixel[,] matrizCMY, Pixel[,] matrizRGB, int width, int height)
         {
             for (int y = 0; y < height; y++)
             {
                 for (int x = 0; x < width; x++)
                 {
-                    matrizCMY[y, x].R = 255 - matrizRGB[y, x].R;
-                    matrizCMY[y, x].G = 255 - matrizRGB[y, x].G;
-                    matrizCMY[y, x].B = 255 - matrizRGB[y, x].B;
+                    matrizCMY[x, y].R = 255 - matrizRGB[x, y].R;
+                    matrizCMY[x, y].G = 255 - matrizRGB[x, y].G;
+                    matrizCMY[x, y].B = 255 - matrizRGB[x, y].B;
                 }
             }
         }
@@ -94,13 +109,13 @@ namespace ProcessamentoImagens
                         r = *(pixel++);
 
                         //matriz RGB
-                        matrizRGB[x, y] = new Classes.Pixel(r, g, b);
+                        matrizRGB[x, y] = new Pixel(r, g, b);
 
                         //matriz CMY
-                        matrizCMY[x, y] = new Classes.Pixel(255 - r, 255 - g, 255 - b);
+                        matrizCMY[x, y] = new Pixel(255 - r, 255 - g, 255 - b);
 
                         //matriz HSI
-                        matrizHSI[x, y] = new Classes.Pixel(0, 0, 0); //inicialização
+                        matrizHSI[x, y] = new Pixel(0, 0, 0); //inicialização
 
                         //normalizar 1 unica vez
                         double rNorm = NormalizaR(r, g, b);
@@ -194,7 +209,7 @@ namespace ProcessamentoImagens
         //---------------------------------------------------------------------------------
 
         //----------------------- HSI para RGB --------------------------------------------
-        public static void HSIparaRGB(int H, int S, int I, ref int r, ref int g, ref int b) //RGB por referência
+        public static void HSIparaRGB(double H, double S, double I, ref int r, ref int g, ref int b) //RGB por referência
         {
             double h, s, i, x, y, z;
 
@@ -316,81 +331,51 @@ namespace ProcessamentoImagens
         }
 
 
-        public static void GerarImagensHSI(Bitmap imgBitmapH,Bitmap imgBitmapS, Bitmap imgBitmapI, Classes.Pixel[,] matrizHSI)
+       
+
+
+
+        public static void CinzaHSI(Bitmap imgBitmap,  Pixel[,] matrizHSI, Pixel[,] matrizRGB)
         {
-            int width = imgBitmapH.Width;
-            int height = imgBitmapH.Height;
+            int width = imgBitmap.Width;
+            int height = imgBitmap.Height;
             int pixelSize = 3;
 
-            BitmapData dataH = imgBitmapH.LockBits(new Rectangle(0, 0, width, height),
-                ImageLockMode.ReadWrite,PixelFormat.Format24bppRgb);
-
-            BitmapData dataS = imgBitmapS.LockBits(new Rectangle(0, 0, width, height),
+            BitmapData dataH = imgBitmap.LockBits(new Rectangle(0, 0, width, height),
                 ImageLockMode.ReadWrite, PixelFormat.Format24bppRgb);
-
-            BitmapData dataI = imgBitmapI.LockBits(new Rectangle(0, 0, width, height),
-                ImageLockMode.ReadWrite,PixelFormat.Format24bppRgb);
 
             unsafe
             {
-                byte* origemH = (byte*)dataH.Scan0.ToPointer();
-                byte* origemS = (byte*)dataS.Scan0.ToPointer();
-                byte* origemI = (byte*)dataI.Scan0.ToPointer();
-
-                byte* pixelH;
-                byte* pixelS;
-                byte* pixelI;
+                byte* origem = (byte*)dataH.Scan0.ToPointer();
+                byte* pixel;
+                int r=0, g=0, b=0;
 
                 for (int y = 0; y < height; y++)
                 {
                     for (int x = 0; x < width; x++)
                     {
-                        pixelH = origemH + y * dataH.Stride + x * pixelSize;
-                        pixelS = origemS + y * dataS.Stride + x * pixelSize;
-                        pixelI = origemI + y * dataI.Stride + x * pixelSize;
-
-                        int h = matrizHSI[x, y].R;
-                        int s = matrizHSI[x, y].G;
-                        int i = matrizHSI[x, y].B;
-
-                        // ----- Conversões -----
-
-                        int valorH = (int)(h * 255.0 / 360.0);
-                        int valorS = (int)(s * 255.0 / 100.0);
-                        int valorI = i;
-
-                        //limitar os valores para o intervalo [0, 255]
-                        if(valorH < 0) valorH = 0;
-                        if(valorH > 255) valorH = 255;
-
-                        if(valorS < 0) valorS = 0;
-                        if(valorS > 255) valorS = 255;
-
-                        if(valorI < 0) valorI = 0;
-                        if (valorI > 255) valorI = 255;
+                        pixel = origem + y * dataH.Stride + x * pixelSize;
 
 
-                        // H
-                        *(pixelH++) = (byte)valorH;
-                        *(pixelH++) = (byte)valorH;
-                        *(pixelH++) = (byte)valorH;
+                        matrizHSI[x, y].G = 0;
 
-                        // S
-                        *(pixelS++) = (byte)valorS;
-                        *(pixelS++) = (byte)valorS;
-                        *(pixelS++) = (byte)valorS;
+                        HSIparaRGB(matrizHSI[x, y].R, matrizHSI[x, y].G, matrizHSI[x, y].B, ref r, ref g, ref b);
 
-                        // I
-                        *(pixelI++) = (byte)valorI;
-                        *(pixelI++) = (byte)valorI;
-                        *(pixelI++) = (byte)valorI;
+                        matrizRGB[x, y].R = r;
+                        matrizRGB[x, y].G = g;
+                        matrizRGB[x, y].B = b;
+
+                        pixel[0] = (byte)b;
+                        pixel[1] = (byte)g;
+                        pixel[2] = (byte)r;
+
                     }
                 }
             }
-            imgBitmapH.UnlockBits(dataH);
-            imgBitmapS.UnlockBits(dataS);
-            imgBitmapI.UnlockBits(dataI);
-        }
 
+            imgBitmap.UnlockBits(dataH);
+        }
     }
+
+
 }
