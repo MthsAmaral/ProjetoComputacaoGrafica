@@ -10,10 +10,11 @@ namespace ProcessamentoImagens
     {
         private Image image, imageOriginal;
         private Bitmap imageBitmap;
-        private PixelCMY[,] matrizCMY;
-        private PixelRGB[,] matrizRGB;
-        private PixelHSI[,] matrizHSI;
-        private int brilho = 15, matiz = 15;
+        private PixelCMY[,] matrizCMY; //valores inteiros
+        private PixelRGB[,] matrizRGB; //valores inteiros
+        private PixelHSI[,] matrizHSI; //valores reais (double)
+        private int matiz = 15;
+        private double brilho = 0.15;
 
         public frmPrincipal()
         {
@@ -42,6 +43,7 @@ namespace ProcessamentoImagens
 
                 //atualizar o valor do brilho no campo de texto
                 textBoxBrilho.Text = CalculaBrilhoMedio().ToString();
+                textBoxHue.Text = CalculaHueMedio().ToString();
 
                 //depurar
                 Console.WriteLine("Teste");
