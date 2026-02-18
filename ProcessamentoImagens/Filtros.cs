@@ -9,7 +9,7 @@ namespace ProcessamentoImagens
     class Filtros
     {
         //ajustar o brilho da imagem
-        public static void AjustarBrilho(Bitmap imageBitmap, int valorBrilho, PixelRGB[,] matrizRGB, PixelCMY[,] matrizCMY, PixelHSI[,] matrizHSI, bool aumenta)
+        public static void AjustarBrilho(Bitmap imageBitmap, double valorBrilho, PixelRGB[,] matrizRGB, PixelCMY[,] matrizCMY, PixelHSI[,] matrizHSI, bool aumenta)
         {
             int width = imageBitmap.Width;
             int height = imageBitmap.Height;
@@ -32,16 +32,17 @@ namespace ProcessamentoImagens
                         if (aumenta)
                         {
                             //I += delta;      // delta pode ser 0.1, -0.05 etc
-                            matrizHSI[x, y].I += valorBrilho;
-                            matrizHSI[x, y].I = Math.Max(0.0, Math.Min(1.0, matrizHSI[x, y].I));
+                            matrizHSI[x, y].I *= (1.0+ valorBrilho);
                             
                         }
                         else //diminui
                         {
-                            matrizHSI[x, y].I -= valorBrilho;
+                            matrizHSI[x, y].I *= (1.0 - valorBrilho);
                         }
 
-                        matrizHSI[x, y].I = Math.Max(0.0, Math.Min(255, matrizHSI[x, y].I));
+                        //limitado a [0.05, 0.95] para evitar extremos de brilho
+                        matrizHSI[x, y].I = Math.Max(0.05, Math.Min(0.95, matrizHSI[x, y].I));
+
 
                         HSIparaRGB(matrizHSI[x, y].H, matrizHSI[x, y].S, matrizHSI[x, y].I, ref r, ref g, ref b);
 

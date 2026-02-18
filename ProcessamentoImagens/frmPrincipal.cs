@@ -14,7 +14,7 @@ namespace ProcessamentoImagens
         private PixelRGB[,] matrizRGB; //valores inteiros
         private PixelHSI[,] matrizHSI; //valores reais (double)
         private int matiz = 15;
-        private double brilho = 0.15;
+        private double brilho = 0.05;
 
         public frmPrincipal()
         {
@@ -42,8 +42,8 @@ namespace ProcessamentoImagens
                 Filtros.CalculaValores(imgCalculo, matrizRGB, matrizCMY, matrizHSI); //matrizes inicializadas com valores calculados
 
                 //atualizar o valor do brilho no campo de texto
-                textBoxBrilho.Text = CalculaBrilhoMedio().ToString();
-                textBoxHue.Text = CalculaHueMedio().ToString();
+                textBoxBrilho.Text = CalculaBrilhoMedio().ToString("F2");
+                textBoxHue.Text = CalculaHueMedio().ToString("F2");
 
                 //depurar
                 Console.WriteLine("Teste");
@@ -155,7 +155,7 @@ namespace ProcessamentoImagens
                         $"Pixel: ({imgX}, {imgY})\n" +
                         $"RGB: ({matrizRGB[imgX, imgY].R},{matrizRGB[imgX, imgY].G}, {matrizRGB[imgX, imgY].B})  " +
                         $"CMY: ({matrizCMY[imgX, imgY].C}, {matrizCMY[imgX, imgY].M}, {matrizCMY[imgX, imgY].Y})  " +
-                        $"HSI: ({matrizHSI[imgX, imgY].H}, {matrizHSI[imgX, imgY].S}, {matrizHSI[imgX, imgY].I})";
+                        $"HSI: ({matrizHSI[imgX, imgY].H:F4} , {matrizHSI[imgX, imgY].S:F4} , {matrizHSI[imgX, imgY].I:F4})";
 
                     //(mensagem,onde mostrar, posição perto do mouse, tempo)
                     toolTip1.Show(texto, pictBoxImg1, e.Location.X + 15, e.Location.Y + 15,1000);
@@ -172,18 +172,7 @@ namespace ProcessamentoImagens
             }
         }
 
-        private void btnAumentarBrilho_Click(object sender, EventArgs e)
-        {
-            Bitmap imgBitmap = new Bitmap(image);
-            if (image != null)
-            {
-                Filtros.AjustarBrilho(imgBitmap, brilho, matrizRGB, matrizCMY, matrizHSI, true); //o true aumenta o brilho
-                pictBoxImg1.Image = imgBitmap;
-                image = imgBitmap;
-
-                textBoxBrilho.Text = CalculaBrilhoMedio().ToString();
-            }
-        }
+        
 
         private void btnCinzaHSI_Click(object sender, EventArgs e)
         {
@@ -200,6 +189,7 @@ namespace ProcessamentoImagens
             }
         }
 
+
         private void btnAumentarHue_Click(object sender, EventArgs e)
         {
             Bitmap imgBitmap = new Bitmap(image);
@@ -209,7 +199,7 @@ namespace ProcessamentoImagens
                 pictBoxImg1.Image = imgBitmap;
                 image = imgBitmap;
 
-                textBoxHue.Text = CalculaHueMedio().ToString();
+                textBoxHue.Text = CalculaHueMedio().ToString("F2");
             }
         }
 
@@ -222,7 +212,22 @@ namespace ProcessamentoImagens
                 pictBoxImg1.Image = imgBitmap;
                 image = imgBitmap;
 
-                textBoxHue.Text = CalculaHueMedio().ToString();
+                textBoxHue.Text = CalculaHueMedio().ToString("F2");
+            }
+        }
+
+        private void btnAumentarBrilho_Click(object sender, EventArgs e)
+        {
+            
+            if (image != null)
+            {
+                Bitmap imgBitmap = new Bitmap(image);
+
+                Filtros.AjustarBrilho(imgBitmap, brilho, matrizRGB, matrizCMY, matrizHSI, true); //o true aumenta o brilho
+                pictBoxImg1.Image = imgBitmap;
+                image = imgBitmap;
+
+                textBoxBrilho.Text = CalculaBrilhoMedio().ToString("F2");
             }
         }
 
@@ -235,7 +240,7 @@ namespace ProcessamentoImagens
                 pictBoxImg1.Image = imgBitmap;
                 image = imgBitmap;
 
-                textBoxBrilho.Text = CalculaBrilhoMedio().ToString();
+                textBoxBrilho.Text = CalculaBrilhoMedio().ToString("F2");
             }
         }
     }
