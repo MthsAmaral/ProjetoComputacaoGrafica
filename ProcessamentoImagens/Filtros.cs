@@ -64,59 +64,64 @@ namespace ProcessamentoImagens
         }
 
         //ajustar a matiz
-        public static void AjustarHue(Bitmap imageBitmap, int matiz, PixelRGB[,] matrizRGB, PixelCMY[,] matrizCMY, PixelHSI[,] matrizHSI, bool aumenta)
+        public static void AjustarHue(Bitmap imageBitmap, int matiz, PixelRGB[,] matrizRGB,
+                              PixelCMY[,] matrizCMY, PixelHSI[,] matrizHSI, bool aumenta)
         {
             int width = imageBitmap.Width;
             int height = imageBitmap.Height;
             int pixelSize = 3;
+
             int r = 0, g = 0, b = 0;
 
-            BitmapData bitmapData = imageBitmap.LockBits(new Rectangle(0, 0, width, height),
-                ImageLockMode.ReadWrite, PixelFormat.Format24bppRgb);
+            BitmapData bitmapData = imageBitmap.LockBits(
+                new Rectangle(0, 0, width, height),
+                ImageLockMode.ReadWrite,
+                PixelFormat.Format24bppRgb);
 
             unsafe
             {
                 byte* origem = (byte*)bitmapData.Scan0.ToPointer();
                 byte* pixel;
+
                 for (int y = 0; y < height; y++)
                 {
                     for (int x = 0; x < width; x++)
                     {
                         pixel = origem + y * bitmapData.Stride + x * pixelSize;
 
+                        // Ajusta o Hue
                         if (aumenta)
-                        {
                             matrizHSI[x, y].H += matiz;
-                        }
-                        else //diminui
-                        {
+                        else
                             matrizHSI[x, y].H -= matiz;
-                        }
 
-                        // normalização circular
-                        //matrizHSI[x, y].H = matrizHSI[x, y].H % 360.0;
+                        // 🔥 Normalização circular do Hue (0 – 360)
+                        matrizHSI[x, y].H = matrizHSI[x, y].H % 360;
+                        if (matrizHSI[x, y].H < 0)
+                            matrizHSI[x, y].H += 360;
 
-                        //if (matrizHSI[x, y].H < 0)
-                        //    matrizHSI[x, y].H += 360.0;
-
+                        // Converte para RGB novamente
                         HSIparaRGB(matrizHSI[x, y].H, matrizHSI[x, y].S, matrizHSI[x, y].I, ref r, ref g, ref b);
 
-                        //atualizar a matriz de RGB
+                        // Atualiza matriz RGB
                         matrizRGB[x, y].R = r;
                         matrizRGB[x, y].G = g;
                         matrizRGB[x, y].B = b;
 
-                        //atualizar a imagem com os novos valores de RGB
+                        // Atualiza imagem
                         pixel[0] = (byte)b;
                         pixel[1] = (byte)g;
                         pixel[2] = (byte)r;
                     }
                 }
-                //atualizar a matriz de CMY
+
+                // Atualiza CMY após modificar RGB
                 AtualizarMatrizCMY(matrizCMY, matrizRGB, width, height);
             }
+
             imageBitmap.UnlockBits(bitmapData);
         }
+
 
         public static void AtualizarMatrizCMY(PixelCMY[,] matrizCMY, PixelRGB[,] matrizRGB, int width, int height)
         {
@@ -250,7 +255,7 @@ namespace ProcessamentoImagens
         {
             return (R+G+B)/3;
         }
-
+        
         //---------------------------------------------------------------------------------
         //---------------------------------------------------------------------------------
 
@@ -589,31 +594,95 @@ namespace ProcessamentoImagens
                     {
                         pixel = origem + y * img.Stride + x * pixelSize;
 
-                        if(canal == 'H') //canal H
+                        int valor = 0;
+
+                        if (canal == 'H')
+                            valor = ConverteH(matrizHSI[x, y].H);
+
+                        else if (canal == 'S')
+                            valor = ConverteS(matrizHSI[x, y].S);
+
+                        else
+                            valor = ConverteI(matrizHSI[x, y].I,matrizRGB[x, y].R,matrizRGB[x, y].G,matrizRGB[x, y].B);
+
+                        pixel[0] = (byte)valor;
+                        pixel[1] = (byte)valor;
+                        pixel[2] = (byte)valor;
+                    }
+                }
+            }
+
+            imgBitmap.UnlockBits(img);
+        }
+
+
+        public static void SegmentarHue(Bitmap imgOrigem,Bitmap imgDest,PixelHSI[,] matrizHSI,int inicio,int fim)
+        {
+            int width = imgOrigem.Width;
+            int height = imgOrigem.Height;
+            int pixelSize = 3;
+
+            BitmapData origemData = imgOrigem.LockBits(new Rectangle(0, 0, width, height),
+                ImageLockMode.ReadOnly,PixelFormat.Format24bppRgb);
+
+            BitmapData destData = imgDest.LockBits(new Rectangle(0, 0, width, height),
+                ImageLockMode.WriteOnly,PixelFormat.Format24bppRgb);
+
+            unsafe
+            {
+                byte* origem = (byte*)origemData.Scan0;
+                byte* destino = (byte*)destData.Scan0;
+
+                for (int y = 0; y < height; y++)
+                {
+                    for (int x = 0; x < width; x++)
+                    {
+                        byte* pOrig = origem + y * origemData.Stride + x * pixelSize;
+                        byte* pDest = destino + y * destData.Stride + x * pixelSize;
+
+
+                        // Converte o Hue armazenado em radianos para graus (0 a 360)
+                        int h = (int)(matrizHSI[x, y].H * 180.0 / Math.PI);
+
+                        bool dentroIntervalo;
+
+                        // intervalo normal
+                        // Exemplo: 50 até 120
+                        if (inicio <= fim)
                         {
-                            int h = ConverteH(matrizHSI[x, y].H);
-                            pixel[0] = (byte)h;
-                            pixel[1] = (byte)h;
-                            pixel[2] = (byte)h;
+                            if (h >= inicio && h <= fim)
+                                dentroIntervalo = true;
+                            else
+                                dentroIntervalo = false;
                         }
-                        else if (canal == 'S') //canal S
+                        else // intervalo circular Exemplo: 330 até 30 (330 ---- 360 ---- 0 ---- 30)
                         {
-                            int s = ConverteS(matrizHSI[x, y].S);
-                            pixel[0] = (byte)s;
-                            pixel[1] = (byte)s;
-                            pixel[2] = (byte)s;
+                            if(h >= inicio || h <= fim)
+                                dentroIntervalo = true;
+                            else
+                                dentroIntervalo = false;
                         }
-                        else //canal I
+
+                        if (dentroIntervalo)
                         {
-                            int i = ConverteI(matrizHSI[x, y].I, matrizRGB[x, y].R, matrizRGB[x, y].G, matrizRGB[x, y].B);
-                            pixel[0] = (byte)matrizHSI[x, y].I;
-                            pixel[1] = (byte)matrizHSI[x, y].I;
-                            pixel[2] = (byte)matrizHSI[x, y].I;
+                            // mantém pixel original
+                            pDest[0] = pOrig[0];
+                            pDest[1] = pOrig[1];
+                            pDest[2] = pOrig[2];
+                        }
+                        else
+                        {
+                            // pinta preto (máscara)
+                            pDest[0] = 0;
+                            pDest[1] = 0;
+                            pDest[2] = 0;
                         }
                     }
                 }
             }
-            imgBitmap.UnlockBits(img);
+            imgOrigem.UnlockBits(origemData);
+            imgDest.UnlockBits(destData);
         }
+
     }
 }

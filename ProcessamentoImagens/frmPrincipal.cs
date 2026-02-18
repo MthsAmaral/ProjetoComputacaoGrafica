@@ -13,12 +13,26 @@ namespace ProcessamentoImagens
         private PixelCMY[,] matrizCMY; //valores inteiros
         private PixelRGB[,] matrizRGB; //valores inteiros
         private PixelHSI[,] matrizHSI; //valores reais (double)
-        private int matiz = 15;
+        private int matiz = 10;
         private double brilho = 0.05;
 
         public frmPrincipal()
         {
             InitializeComponent();
+            //inicia programa com os botões de manipulação desabilitados
+            ControlarBotoes(false);
+
+            //cria mensagem de ajuda para o campo de texto do Hue, explicando o que cada valor representa
+            toolTip1.SetToolTip(labelHueInfo,
+            "0° = Vermelho\n" +
+            "60° = Amarelo\n" +
+            "120° = Verde\n" +
+            "180° = Ciano\n" +
+            "240° = Azul\n" +
+            "300° = Magenta\n" +
+            "360° = Vermelho");
+            toolTip1.IsBalloon = true;      // estilo balão
+
         }
 
         private void btnAbrirImagem_Click(object sender, EventArgs e)
@@ -43,10 +57,10 @@ namespace ProcessamentoImagens
 
                 //atualizar o valor do brilho no campo de texto
                 textBoxBrilho.Text = CalculaBrilhoMedio().ToString("F2");
-                textBoxHue.Text = CalculaHueMedio().ToString("F2");
+                textBoxHue.Text = CalculaHueMedio().ToString("F2") + "°";
 
-                //depurar
-                Console.WriteLine("Teste");
+                //habilitar os botões
+                ControlarBotoes(true);
 
                 pictBoxImg1.SizeMode = PictureBoxSizeMode.StretchImage;
             }
@@ -85,6 +99,11 @@ namespace ProcessamentoImagens
 
         private void btnLimpar_Click(object sender, EventArgs e)
         {
+            ControlarBotoes(false);
+
+            textBoxHue.Text = "";
+            textBoxBrilho.Text = "";
+
             image = null;
             imageBitmap = null;
             pictBoxImg1.Image = null;
@@ -105,7 +124,7 @@ namespace ProcessamentoImagens
             }
         }
 
-        private void CMY_Click(object sender, EventArgs e)
+        private void btnCMY_Click(object sender, EventArgs e)
         {
             if(image != null)
             {
@@ -117,7 +136,7 @@ namespace ProcessamentoImagens
             }
         }
 
-        private void buttonHSI_Click(object sender, EventArgs e)
+        private void btnHSI_Click(object sender, EventArgs e)
         {
             if(image != null)
             {
@@ -140,28 +159,7 @@ namespace ProcessamentoImagens
             }
         }
 
-        private void pictBoxImg1_MouseMove(object sender, MouseEventArgs e)
-        {
-            if (pictBoxImg1.Image != null)
-            {
-                int imgX = e.X * pictBoxImg1.Image.Width / pictBoxImg1.Width;
-                int imgY = e.Y * pictBoxImg1.Image.Height / pictBoxImg1.Height;
-
-                if (imgX >= 0 && imgX < pictBoxImg1.Image.Width &&
-                    imgY >= 0 && imgY < pictBoxImg1.Image.Height)
-                {
-                 
-                    string texto =
-                        $"Pixel: ({imgX}, {imgY})\n" +
-                        $"RGB: ({matrizRGB[imgX, imgY].R},{matrizRGB[imgX, imgY].G}, {matrizRGB[imgX, imgY].B})  " +
-                        $"CMY: ({matrizCMY[imgX, imgY].C}, {matrizCMY[imgX, imgY].M}, {matrizCMY[imgX, imgY].Y})  " +
-                        $"HSI: ({matrizHSI[imgX, imgY].H:F4} , {matrizHSI[imgX, imgY].S:F4} , {matrizHSI[imgX, imgY].I:F4})";
-
-                    //(mensagem,onde mostrar, posição perto do mouse, tempo)
-                    toolTip1.Show(texto, pictBoxImg1, e.Location.X + 15, e.Location.Y + 15,1000);
-                }
-            }
-        }
+        
 
         private void btnImagemOriginal_Click(object sender, EventArgs e)
         {
@@ -174,51 +172,40 @@ namespace ProcessamentoImagens
 
         
 
-        private void btnCinzaHSI_Click(object sender, EventArgs e)
-        {
-            if (image != null)
-            {
-                imageBitmap = (Bitmap)image;
-
-                Bitmap imgDest = new Bitmap(image);
-                
-
-                Filtros.CinzaHSI(imgDest, matrizHSI, matrizRGB);
-
-                pictBoxImg1.Image = imgDest;
-            }
-        }
 
 
         private void btnAumentarHue_Click(object sender, EventArgs e)
         {
-            Bitmap imgBitmap = new Bitmap(image);
+            
             if (image != null)
             {
+                Bitmap imgBitmap = new Bitmap(image);
+
                 Filtros.AjustarHue(imgBitmap, matiz, matrizRGB, matrizCMY, matrizHSI, true); //o true aumenta o angulo da matiz
                 pictBoxImg1.Image = imgBitmap;
                 image = imgBitmap;
 
-                textBoxHue.Text = CalculaHueMedio().ToString("F2");
+                textBoxHue.Text = CalculaHueMedio().ToString("F2") +"°";
             }
         }
 
         private void btnDiminuirHue_Click(object sender, EventArgs e)
         {
-            Bitmap imgBitmap = new Bitmap(image);
+            
             if (image != null)
             {
+                Bitmap imgBitmap = new Bitmap(image);
+
                 Filtros.AjustarHue(imgBitmap, matiz, matrizRGB, matrizCMY, matrizHSI, false); //o false diminui o angulo da matiz
                 pictBoxImg1.Image = imgBitmap;
                 image = imgBitmap;
 
-                textBoxHue.Text = CalculaHueMedio().ToString("F2");
+                textBoxHue.Text = CalculaHueMedio().ToString("F2") + "°";
             }
         }
 
         private void btnAumentarBrilho_Click(object sender, EventArgs e)
         {
-            
             if (image != null)
             {
                 Bitmap imgBitmap = new Bitmap(image);
@@ -233,9 +220,10 @@ namespace ProcessamentoImagens
 
         private void btnDiminuirBrilho_Click(object sender, EventArgs e)
         {
-            Bitmap imgBitmap = new Bitmap(image);
             if (image != null)
             {
+                Bitmap imgBitmap = new Bitmap(image);
+
                 Filtros.AjustarBrilho(imgBitmap, brilho, matrizRGB, matrizCMY, matrizHSI, false); //o false diminui o brilho
                 pictBoxImg1.Image = imgBitmap;
                 image = imgBitmap;
@@ -243,5 +231,74 @@ namespace ProcessamentoImagens
                 textBoxBrilho.Text = CalculaBrilhoMedio().ToString("F2");
             }
         }
+
+
+
+        
+
+        private void pictBoxImg1_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (pictBoxImg1.Image != null)
+            {
+                int imgX = e.X * pictBoxImg1.Image.Width / pictBoxImg1.Width;
+                int imgY = e.Y * pictBoxImg1.Image.Height / pictBoxImg1.Height;
+
+                if (imgX >= 0 && imgX < pictBoxImg1.Image.Width &&
+                    imgY >= 0 && imgY < pictBoxImg1.Image.Height)
+                {
+
+                    string texto =
+                        $"Pixel: ({imgX}, {imgY})\n" +
+                        $"RGB: ({matrizRGB[imgX, imgY].R},{matrizRGB[imgX, imgY].G}, {matrizRGB[imgX, imgY].B})  " +
+                        $"CMY: ({matrizCMY[imgX, imgY].C}, {matrizCMY[imgX, imgY].M}, {matrizCMY[imgX, imgY].Y})  " +
+                        $"HSI: ({matrizHSI[imgX, imgY].H:F4} , {matrizHSI[imgX, imgY].S:F4} , {matrizHSI[imgX, imgY].I:F4})";
+
+                    //(mensagem,onde mostrar, posição perto do mouse, tempo)
+                    toolTip1.Show(texto, pictBoxImg1, e.Location.X + 15, e.Location.Y + 15, 1000);
+                }
+            }
+        }
+
+        private void btnSegmentarHue_Click(object sender, EventArgs e)
+        {
+            if (image != null)
+            {
+                int inicio = (int)numericUpDownInicio.Value;
+                int fim = (int)numericUpDownFim.Value;
+
+                
+                Bitmap imgDest = new Bitmap(image);
+                imageBitmap = (Bitmap)image;
+
+                Filtros.SegmentarHue(imageBitmap, imgDest, matrizHSI, inicio, fim);
+
+
+                pictBoxImg1.Image = imgDest;
+
+                esticarImgH();
+            }
+        }
+
+        private void ControlarBotoes(bool habilitar)
+        {
+            btnLimpar.Enabled = habilitar;
+            btnImagemOriginal.Enabled = habilitar;
+            btnLuminanciaComDMA.Enabled = habilitar;
+            btnCMY.Enabled = habilitar;
+
+            btnAumentarBrilho.Enabled = habilitar;
+            btnDiminuirBrilho.Enabled = habilitar;
+
+            btnAumentarHue.Enabled = habilitar;
+            btnDiminuirHue.Enabled = habilitar;
+
+            btnHSI.Enabled = habilitar;
+
+            btnSegmentarHue.Enabled = habilitar;
+            numericUpDownInicio.Enabled = habilitar;
+            numericUpDownFim.Enabled = habilitar;
+
+        }
+
     }
 }
