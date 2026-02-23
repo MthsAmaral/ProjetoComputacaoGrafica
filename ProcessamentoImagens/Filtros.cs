@@ -616,7 +616,7 @@ namespace ProcessamentoImagens
         }
 
 
-        public static void SegmentarHue(Bitmap imgOrigem,Bitmap imgDest,PixelHSI[,] matrizHSI,int inicio,int fim)
+        public static void SegmentarHue(Bitmap imgOrigem, Bitmap imgDest, PixelHSI[,] matrizHSI, int inicio, int fim)
         {
             int width = imgOrigem.Width;
             int height = imgOrigem.Height;
@@ -632,6 +632,7 @@ namespace ProcessamentoImagens
             {
                 byte* origem = (byte*)origemData.Scan0;
                 byte* destino = (byte*)destData.Scan0;
+                int r=0, g=0, b=0;
 
                 for (int y = 0; y < height; y++)
                 {
@@ -672,10 +673,11 @@ namespace ProcessamentoImagens
                         }
                         else
                         {
-                            // pinta preto (máscara)
-                            pDest[0] = 0;
-                            pDest[1] = 0;
-                            pDest[2] = 0;
+                            // pinta cinza
+                            HSIparaRGB(matrizHSI[x, y].H, 0, matrizHSI[x, y].I, ref r, ref g, ref b);
+                            pDest[0] = (byte)b;
+                            pDest[1] = (byte)g;
+                            pDest[2] = (byte)r;
                         }
                     }
                 }

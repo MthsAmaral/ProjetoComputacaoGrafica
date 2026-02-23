@@ -35,6 +35,28 @@ namespace ProcessamentoImagens
 
         }
 
+        private void abrindo()
+        {
+            //Criar um Bitmap para realizar o calculo e salvamento dos valores nas matrizes:
+            //  - RGB
+            //  - HSI
+            //  - CMY
+            Bitmap imgCalculo = new Bitmap(image);
+            matrizRGB = new PixelRGB[imgCalculo.Width, imgCalculo.Height];
+            matrizCMY = new PixelCMY[imgCalculo.Width, imgCalculo.Height];
+            matrizHSI = new PixelHSI[imgCalculo.Width, imgCalculo.Height];
+            Filtros.CalculaValores(imgCalculo, matrizRGB, matrizCMY, matrizHSI); //matrizes inicializadas com valores calculados
+
+            //atualizar o valor do brilho no campo de texto
+            textBoxBrilho.Text = CalculaBrilhoMedio().ToString("F2");
+            textBoxHue.Text = CalculaHueMedio().ToString("F2") + "°";
+
+            //habilitar os botões
+            ControlarBotoes(true);
+
+            pictBoxImg1.SizeMode = PictureBoxSizeMode.StretchImage;
+        }
+
         private void btnAbrirImagem_Click(object sender, EventArgs e)
         {
             openFileDialog.FileName = "";
@@ -44,25 +66,7 @@ namespace ProcessamentoImagens
                 image = Image.FromFile(openFileDialog.FileName);
                 imageOriginal = image;//somente para salvar imagem original, caso queira voltar a ela
                 pictBoxImg1.Image = image;
-
-                //Criar um Bitmap para realizar o calculo e salvamento dos valores nas matrizes:
-                //  - RGB
-                //  - HSI
-                //  - CMY
-                Bitmap imgCalculo = new Bitmap(image);
-                matrizRGB = new PixelRGB[imgCalculo.Width, imgCalculo.Height];
-                matrizCMY = new PixelCMY[imgCalculo.Width, imgCalculo.Height];
-                matrizHSI = new PixelHSI[imgCalculo.Width, imgCalculo.Height];
-                Filtros.CalculaValores(imgCalculo, matrizRGB, matrizCMY, matrizHSI); //matrizes inicializadas com valores calculados
-
-                //atualizar o valor do brilho no campo de texto
-                textBoxBrilho.Text = CalculaBrilhoMedio().ToString("F2");
-                textBoxHue.Text = CalculaHueMedio().ToString("F2") + "°";
-
-                //habilitar os botões
-                ControlarBotoes(true);
-
-                pictBoxImg1.SizeMode = PictureBoxSizeMode.StretchImage;
+                abrindo();
             }
         }
 
@@ -166,17 +170,19 @@ namespace ProcessamentoImagens
             if(image != null)
             {
                 pictBoxImg1.Image = imageOriginal;
-                esticarImgH();
+                image = imageOriginal;
+                abrindo();
+                
+                //imageBitmap = (Bitmap)image;
+                //Filtros.CalculaValores(imageBitmap, matrizRGB, matrizCMY, matrizHSI);
+                //textBoxHue.Text = CalculaHueMedio().ToString();
+                //textBoxBrilho.Text = CalculaBrilhoMedio().ToString();
+                //esticarImgH();
             }
         }
 
-        
-
-
-
         private void btnAumentarHue_Click(object sender, EventArgs e)
         {
-            
             if (image != null)
             {
                 Bitmap imgBitmap = new Bitmap(image);
